@@ -9,6 +9,8 @@ def call(body) {
     body.delegate = pipelineParams
     body()
 
+    log.info("TEST")
+
     pipeline {
 
         agent any
@@ -32,6 +34,7 @@ def call(body) {
         stages {
             stage ("Code pull"){
                 steps{
+                    log.info("TEST")
                     checkout scm
                 }
             }
