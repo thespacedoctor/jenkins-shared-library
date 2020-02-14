@@ -1,15 +1,18 @@
-String determineBranchName() {
-    return scm.getUserRemoteConfigs()[0].getUrl()
-}
+// ADD THE FOLLOWING TO YOUR JENKINS FILE TO USE THIS PIPELINE:
+// @Library('thespacedoctor')_
+// pythonPipeline { 
+//     myParam = 'someVal' 
+//     myParam2 = 'someVal2'
+// }
+
+
 
 def call(body) {
-    // evaluate the body block, and collect configuration into the object
+    // EVALUATE THE BODY BLOCK, AND COLLECT CONFIGURATION INTO THE OBJECT
     def pipelineParams= [:]
     body.resolveStrategy = Closure.DELEGATE_FIRST
     body.delegate = pipelineParams
     body()
-
-    log.info("TEST")
 
     pipeline {
 
@@ -29,12 +32,12 @@ def call(body) {
         // SOURCE ANACONDA
         environment {
           PATH="/var/lib/jenkins/anaconda/bin:$PATH"
+          REPO_NAME=repoName()
         }
 
         stages {
             stage ("Code pull"){
                 steps{
-                    log.info("TEST")
                     checkout scm
                 }
             }
@@ -71,4 +74,12 @@ def call(body) {
             }
         }
     }
+}
+
+
+String branchName() {
+    return scm.getUserRemoteConfigs()[0].getUrl()
+}
+String repoName() {
+    return scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
 }
