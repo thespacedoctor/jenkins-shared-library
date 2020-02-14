@@ -1,7 +1,3 @@
-def call(args = null) {
-    return this
-}
-
 def debug(message) {
     echo "DEBUG: ${message}"
 }
@@ -21,4 +17,6 @@ def error(message) {
 def critical(message) {
     echo "CRITICAL: ${message}"
 }
+
+return this
 
