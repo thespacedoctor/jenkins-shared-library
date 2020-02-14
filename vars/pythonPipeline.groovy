@@ -34,6 +34,7 @@ def call(body) {
           PATH="/var/lib/jenkins/anaconda/bin:$PATH"
           REPO_NAME=repoName()
           OVERVIEW_URL=activityUrl()
+          BUILD_URL=buildUrl()
         }
 
         stages {
@@ -88,6 +89,11 @@ String activityUrl() {
     rn = repoName()
     return "${env.JENKINS_URL}/blue/organizations/jenkins/${rn}/activity"
 }
+String buildUrl() {
+    rn = repoName()
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
+    return "${env.JENKINS_URL}/blue/organizations/jenkins/${rn}/detail/${bn}/${env.BUILD_NUMBER}/pipeline"
+}
 String slackMessage(status) {
-    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}>\n ${env.REPO_NAME}\n ${env.BRANCH_NAME} ${env.NODE_NAME} Build ${env.BUILD_NUMBER} ${status} (<${env.JENKINS_URL}/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline|Open>)"
+    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}>\n <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}"
 }
