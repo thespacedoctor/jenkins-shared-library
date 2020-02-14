@@ -83,6 +83,6 @@ String branchName() {
 String repoName() {
     return scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
 }
-String slackMessage(string status) {
+String slackMessage(status) {
     return "${env.BRANCH_NAME}\n ${env.REPO_NAME}\n ${env.NODE_NAME} Build ${env.BUILD_NUMBER} ${status} (<${env.JENKINS_URL}/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline|Open>)"
 }
