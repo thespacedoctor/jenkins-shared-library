@@ -66,11 +66,11 @@ def call(body) {
             // http://167.99.90.204:8080/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline
             // URL ENCODE BRANCH PLEASE: ${env.JENKINS_URL}/blue/organizations/jenkins/${git_repo_name}/${git_branch_name}/${env.BUILD_NUMBER}/pipeline
             always {
-                slackSend message: "${env.BRANCH_NAME}\n ${env.REPO_NAME}\n ${env.NODE_NAME} Build Finished - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.JENKINS_URL}/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline|Open>)"
+                slackSend message: slackMessage("Finished Successfully")
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
             }
             failure {
-                echo "Send e-mail, when failed"
+                slackSend message: slackMessage("Failed")
             }
         }
     }
@@ -82,4 +82,7 @@ String branchName() {
 }
 String repoName() {
     return scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+}
+String slackMessage(string status) {
+    return "${env.BRANCH_NAME}\n ${env.REPO_NAME}\n ${env.NODE_NAME} Build ${env.BUILD_NUMBER} ${status} (<${env.JENKINS_URL}/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline|Open>)"
 }
