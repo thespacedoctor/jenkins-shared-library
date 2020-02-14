@@ -33,6 +33,7 @@ def call(body) {
         environment {
           PATH="/var/lib/jenkins/anaconda/bin:$PATH"
           REPO_NAME=repoName()
+          OVERVIEW_URL=activityUrl()
         }
 
         stages {
@@ -83,6 +84,10 @@ String branchName() {
 String repoName() {
     return scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
 }
+String activityUrl() {
+    rn = repoName()
+    return "${env.JENKINS_URL}/blue/organizations/jenkins/${rn}/activity"
+}
 String slackMessage(status) {
-    return "${env.BRANCH_NAME}\n ${env.REPO_NAME}\n ${env.NODE_NAME} Build ${env.BUILD_NUMBER} ${status} (<${env.JENKINS_URL}/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline|Open>)"
+    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}>\n ${env.REPO_NAME}\n ${env.BRANCH_NAME} ${env.NODE_NAME} Build ${env.BUILD_NUMBER} ${status} (<${env.JENKINS_URL}/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline|Open>)"
 }
