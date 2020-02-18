@@ -56,7 +56,7 @@ def call(body) {
             stage('Build conda python 2.7 environment & install code') {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
-                          source activate ${BUILD_TAG}-p3 
+                          source activate ${BUILD_TAG}-p2
                           conda install pytest
                           python setup.py install
                         '''
