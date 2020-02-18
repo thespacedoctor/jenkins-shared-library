@@ -69,7 +69,7 @@ def call(body) {
                 post {
                     always {
                         // Archive unit tests for the future
-                        junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p3.xml', fingerprint: true
+                        junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p3.xml'
                     }
                 }
             }
