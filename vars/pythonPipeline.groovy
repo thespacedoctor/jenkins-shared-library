@@ -68,12 +68,6 @@ def call(body) {
                             python -m pytest --verbose --junit-xml test-reports/unit_tests_p3.xml
                         '''
                 }
-                post {
-                    always {
-                        // Archive unit tests for the future
-                        junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p3.xml'
-                    }
-                }
             }
             
         }
