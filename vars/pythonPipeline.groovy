@@ -75,6 +75,19 @@ def call(body) {
                     }
                 }
             }
+            stage('Unit tests for Python 2') {
+                steps {
+                    sh  ''' source activate ${BUILD_TAG}-p2
+                            python -m pytest --verbose --junit-xml test-reports/unit_tests_p2.xml
+                        '''
+                }
+                post {
+                    always {
+                        // Archive unit tests for the future
+                        junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p2.xml'
+                    }
+                }
+            }
             
         }
         post {
@@ -85,6 +98,7 @@ def call(body) {
             always {
                 slackSend message: slackMessage("Finished Successfully")
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
+                sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all'
             }
             failure {
                 slackSend message: slackMessage("Failed")
