@@ -48,7 +48,8 @@ def call(body) {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip
                           source activate ${BUILD_TAG}-p3 
-                          conda install pytest
+                          conda install pytest coverage pytest-cov
+                          pip install coverage-badge
                           python setup.py install
                         '''
                 }
@@ -57,7 +58,8 @@ def call(body) {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
                           source activate ${BUILD_TAG}-p2
-                          conda install pytest pandas
+                          conda install pytest pandas coverage pytest-cov 
+                          pip install coverage-badge
                           python setup.py install
                         '''
                 }
@@ -65,7 +67,9 @@ def call(body) {
             stage('Unit tests for Python 3') {
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
-                            python -m pytest --verbose --junit-xml test-reports/unit_tests_p3.xml
+                            pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report html
+                            coverage html
+                            coverage-badge -f -o coverage.svg 
                         '''
                 }
                 post {
@@ -78,7 +82,7 @@ def call(body) {
             stage('Unit tests for Python 2') {
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p2
-                            python -m pytest --verbose --junit-xml test-reports/unit_tests_p2.xml
+                            pytest --verbose --junit-xml test-reports/unit_tests_p2.xml
                         '''
                 }
                 post {
