@@ -44,7 +44,7 @@ def call(body) {
                 }
             }
 
-            stage('Build conda python 3.7 environment') {
+            stage('Build conda python 3.7 environment & install code') {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip
                           source activate ${BUILD_TAG}-p3 
@@ -52,15 +52,30 @@ def call(body) {
                         '''
                 }
             }
-            stage('Test conda python 3.7 environment') {
+            stage('Build conda python 2.7 environment & install code') {
                 steps {
-                    sh '''source activate ${BUILD_TAG}-p3 
-                          pip list
-                          which pip
-                          which python
+                    sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
+                          source activate ${BUILD_TAG}-p3 
+                          python setup.py install
                         '''
                 }
             }
+            stage('Unit tests for Python 3') {
+                steps {
+                    sh  ''' source activate ${BUILD_TAG}-p3
+                            python -m pytest --verbose --junit-xml reports/unit_tests_p3.xml
+                        '''
+                }
+                post {
+                    always {
+                        // Archive unit tests for the future
+                        junit (allowEmptyResults: true,
+                              testResults: './reports/unit_tests_p3.xml',
+                              fingerprint: true)
+                    }
+                }
+            }
+            
         }
         post {
             // http://167.99.90.204:8080/blue/organizations/jenkins/xxxpython_package_namexxx/detail/feature%2Fadding-jenkins-pipeline/12/pipeline
