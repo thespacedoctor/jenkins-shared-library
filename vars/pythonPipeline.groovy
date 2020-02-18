@@ -69,7 +69,8 @@ def call(body) {
                     sh  ''' source activate ${BUILD_TAG}-p3
                             pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report html
                             coverage html
-                            coverage-badge -f -o coverage.svg 
+                            coverage-badge -f -o coverage.svg
+                            
                         '''
                 }
                 post {
@@ -89,6 +90,28 @@ def call(body) {
                     always {
                         // Archive unit tests for the future
                         junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p2.xml'
+                    }
+                }
+            }
+            stage('Convert Coverage Reports for Jenkins') {
+                steps {
+                    sh  ''' source activate ${BUILD_TAG}-p3
+                            coverage html -o ./reports/coverage.xml
+                        '''
+                }
+                post{
+                always{
+                    step([$class: 'CoberturaPublisher',
+                                   autoUpdateHealth: false,
+                                   autoUpdateStability: false,
+                                   coberturaReportFile: 'reports/coverage.xml',
+                                   failNoReports: false,
+                                   failUnhealthy: false,
+                                   failUnstable: false,
+                                   maxNumberOfBuilds: 10,
+                                   onlyStable: false,
+                                   sourceEncoding: 'ASCII',
+                                   zoomCoverageChart: false])
                     }
                 }
             }
