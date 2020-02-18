@@ -62,19 +62,19 @@ def call(body) {
                         '''
                 }
             }
-            // stage('Unit tests for Python 3') {
-            //     steps {
-            //         sh  ''' source activate ${BUILD_TAG}-p3
-            //                 python -m pytest --verbose --junit-xml test-reports/unit_tests_p3.xml
-            //             '''
-            //     }
-            //     post {
-            //         always {
-            //             // Archive unit tests for the future
-            //             junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p3.xml'
-            //         }
-            //     }
-            // }
+            stage('Unit tests for Python 3') {
+                steps {
+                    sh  ''' source activate ${BUILD_TAG}-p3
+                            python -m pytest --verbose --junit-xml test-reports/unit_tests_p3.xml
+                        '''
+                }
+                post {
+                    always {
+                        // Archive unit tests for the future
+                        junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p3.xml'
+                    }
+                }
+            }
             
         }
         post {
