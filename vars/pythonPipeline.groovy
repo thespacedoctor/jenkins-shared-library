@@ -48,6 +48,7 @@ def call(body) {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip
                           source activate ${BUILD_TAG}-p3 
+                          conda install pytest
                           python setup.py install
                         '''
                 }
@@ -56,6 +57,7 @@ def call(body) {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
                           source activate ${BUILD_TAG}-p3 
+                          conda install pytest
                           python setup.py install
                         '''
                 }
