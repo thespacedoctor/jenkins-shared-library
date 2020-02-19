@@ -36,6 +36,10 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
+          COVERAGE_RATE = sh (
+            script: 'head -3 reports/coverage.xml  | grep -o "line-rate\\S*" | grep -o "\\d.\\d*"',
+            returnStatus: true
+          ) == 0
         }
 
         stages {
@@ -154,5 +158,5 @@ String coverageReportUrl() {
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
 String slackMessage(status) {
-    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Report>"
+    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${env.COVERAGE_RATE}>"
 }
