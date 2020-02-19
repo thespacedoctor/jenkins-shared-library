@@ -72,7 +72,7 @@ def call(body) {
                             coverage-badge -f -o coverage.svg
                             which head
                             which grep
-                            head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" > reports/coverage.txt
+                            COVERAGE_RATE = $(head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*")
                         '''
                 }
                 post {
@@ -161,7 +161,4 @@ String coverageReportUrl() {
 }
 String slackMessage(status) {
     return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${env.COVERAGE_RATE}>"
-}
-String coverageRate() {
-    return readFile('reports/coverage.txt').trim()
 }
