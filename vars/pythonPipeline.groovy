@@ -36,10 +36,7 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          COVERAGE_RATE = sh (
-            script: 'head -3 reports/coverage.xml  | grep -o "line-rate\\S*" | grep -o "\\d.\\d*"',
-            returnStatus: true
-          ) == 0
+          COVERAGE_RATE=coverageRate()
         }
 
         stages {
@@ -74,6 +71,7 @@ def call(body) {
                     sh  ''' source activate ${BUILD_TAG}-p3
                             pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml --cov-report html
                             coverage-badge -f -o coverage.svg
+                            head -3 reports/coverage.xml  | grep -o "line-rate\\S*" | grep -o "\\d.\\d*" > reports/coverage.txt
                         '''
                 }
                 post {
@@ -159,4 +157,7 @@ String coverageReportUrl() {
 }
 String slackMessage(status) {
     return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${env.COVERAGE_RATE}>"
+}
+String coverageRate() {
+    return readFile('reports/coverage.txt').trim()
 }
