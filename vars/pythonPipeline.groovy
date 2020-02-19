@@ -70,9 +70,6 @@ def call(body) {
                     sh  ''' source activate ${BUILD_TAG}-p3
                             pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml 
                             coverage-badge -f -o coverage.svg
-                            which head
-                            which grep
-                            export COVERAGE_RATE=$(head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*")
                         '''
                 }
                 post {
@@ -96,6 +93,9 @@ def call(body) {
                 }
             }
             stage('Convert Coverage Reports for Jenkins') {
+                environment { 
+                    COVERAGE_RATE= sh (returnStdout: true, script: 'head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*"').trim()
+                }
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
                         '''
