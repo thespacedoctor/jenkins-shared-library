@@ -163,5 +163,6 @@ String slackMessage(status) {
     return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${env.COVERAGE_RATE}>"
 }
 String coverageRate() {
-    return new File('reports/coverage.txt').text
+    String fileContents = File('reports/coverage.txt').text
+    return fileContents 
 }
