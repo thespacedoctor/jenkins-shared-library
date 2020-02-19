@@ -97,8 +97,8 @@ def call(body) {
             }
             stage('Convert Coverage Reports for Jenkins') {
                 environment {
-                   COVERAGE_RATE=coverageRate
-               }
+                   COVERAGE_RATE=coverageRate()
+                }
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
                         '''
