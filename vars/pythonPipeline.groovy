@@ -70,7 +70,9 @@ def call(body) {
                     sh  ''' source activate ${BUILD_TAG}-p3
                             pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml 
                             coverage-badge -f -o coverage.svg
-                            head -3 reports/coverage.xml | grep -o "line-rate\\S*" | grep -o "\\d.\\d*" > reports/coverage.txt || true
+                            which head
+                            which grep
+                            #head -3 reports/coverage.xml | grep -o "line-rate\\S*" | grep -o "\\d.\\d*" > reports/coverage.txt || true
                         '''
                 }
                 post {
