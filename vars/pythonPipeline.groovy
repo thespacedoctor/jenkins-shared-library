@@ -72,9 +72,7 @@ def call(body) {
                             coverage-badge -f -o coverage.svg
                             which head
                             which grep
-                            head -3 reports/coverage.xml 
-                            head -3 reports/coverage.xml | grep -oP "line-rate\\S*" 
-                            head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" 
+                            head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" > reports/coverage.txt
                         '''
                 }
                 post {
