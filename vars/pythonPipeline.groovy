@@ -72,7 +72,7 @@ def call(body) {
                             coverage-badge -f -o coverage.svg
                             which head
                             which grep
-                            COVERAGE_RATE=$(head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*")
+                            export COVERAGE_RATE=$(head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*")
                         '''
                 }
                 post {
@@ -96,9 +96,6 @@ def call(body) {
                 }
             }
             stage('Convert Coverage Reports for Jenkins') {
-                environment {
-                   COVERAGE_RATE=coverageRate()
-               }
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
                         '''
