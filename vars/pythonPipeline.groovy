@@ -72,7 +72,7 @@ def call(body) {
                             coverage-badge -f -o coverage.svg
                             which head
                             which grep
-                            COVERAGE_RATE = $(head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*")
+                            COVERAGE_RATE=$(head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*")
                         '''
                 }
                 post {
