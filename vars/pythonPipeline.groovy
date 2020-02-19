@@ -73,8 +73,8 @@ def call(body) {
                             which head
                             which grep
                             head -3 reports/coverage.xml 
-                            head -3 reports/coverage.xml | grep -o "line-rate\\S*" 
-                            head -3 reports/coverage.xml | grep -o "line-rate\\S*" | grep -o "\\d.\\d*" 
+                            head -3 reports/coverage.xml | grep -oP "line-rate\\S*" 
+                            head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" 
                         '''
                 }
                 post {
