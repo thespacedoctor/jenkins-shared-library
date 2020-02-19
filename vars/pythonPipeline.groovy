@@ -157,10 +157,6 @@ String coverageReportUrl() {
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
 String slackMessage(status) {
-    cr = coverageRate()
+    String cr = File('reports/coverage.txt').text
     return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
-}
-String coverageRate() {
-    String fileContents = File('reports/coverage.txt').text
-    return fileContents 
 }
