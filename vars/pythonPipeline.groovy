@@ -67,10 +67,8 @@ def call(body) {
             stage('Unit tests for Python 3') {
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
-                            pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report html
-                            coverage html
+                            pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml --cov-report html
                             coverage-badge -f -o coverage.svg
-                            
                         '''
                 }
                 post {
@@ -96,7 +94,6 @@ def call(body) {
             stage('Convert Coverage Reports for Jenkins') {
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
-                            coverage html -o ./reports/coverage.xml
                         '''
                 }
                 post{
