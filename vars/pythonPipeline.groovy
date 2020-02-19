@@ -36,7 +36,6 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          COVERAGE_RATE=coverageRate()
         }
 
         stages {
@@ -95,6 +94,9 @@ def call(body) {
                 }
             }
             stage('Convert Coverage Reports for Jenkins') {
+                environment {
+                   COVERAGE_RATE=coverageRate()
+               }
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
                         '''
