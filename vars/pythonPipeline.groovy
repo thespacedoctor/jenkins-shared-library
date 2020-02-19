@@ -96,9 +96,6 @@ def call(body) {
                 }
             }
             stage('Convert Coverage Reports for Jenkins') {
-                environment {
-                   COVERAGE_RATE=coverageRate()
-                }
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
                         '''
@@ -160,7 +157,8 @@ String coverageReportUrl() {
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
 String slackMessage(status) {
-    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${env.COVERAGE_RATE}>"
+    cr = coverageRate()
+    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
 }
 String coverageRate() {
     String fileContents = File('reports/coverage.txt').text
