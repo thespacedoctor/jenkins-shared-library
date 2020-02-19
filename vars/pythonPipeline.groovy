@@ -35,6 +35,7 @@ def call(body) {
           REPO_NAME=repoName()
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
+          COVERAGE_URL=coverageReportUrl()
         }
 
         stages {
@@ -147,6 +148,11 @@ String buildUrl() {
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/blue/organizations/jenkins/${rn}/detail/${bn}/${env.BUILD_NUMBER}/pipeline"
 }
+String coverageReportUrl() {
+    rn = repoName()
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
+    return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
+}
 String slackMessage(status) {
-    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}"
+    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Report>"
 }
