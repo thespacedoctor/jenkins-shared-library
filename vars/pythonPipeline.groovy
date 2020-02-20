@@ -60,8 +60,10 @@ def call(body) {
                     }
                 }
                 steps {
-                    sh '''echo $BRANCH_NAME
-                          break me
+                    sh '''echo ${BRANCH_NAME}
+                          echo ${REPO_NAME}
+                          echo ${COVERAGE_URL}
+                          aahhss
                        '''
                 }
             }
