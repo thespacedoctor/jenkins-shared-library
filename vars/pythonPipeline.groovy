@@ -245,7 +245,7 @@ String branchName2() {
     rn = repoName()
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     this = "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
-    return this
+    return bn
 
 }
 def slackMessage(status) {
