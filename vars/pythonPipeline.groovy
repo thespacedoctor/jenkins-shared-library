@@ -180,7 +180,7 @@ String slackMessage(status) {
 }
 String buildBadgeUrl() {
     rn = repoName()
-    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")    
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%252F")    
     return "${env.JENKINS_URL}/buildStatus/icon?job=${rn}%2F${bn}"
 }
 
