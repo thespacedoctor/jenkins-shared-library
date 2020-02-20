@@ -173,7 +173,7 @@ String coverageReportUrl() {
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
-String slackMessage(status) {
+def slackMessage(status) {
 
     badge = buildBadgeUrl()
     def cr = readFile('reports/coverage.txt').trim()
