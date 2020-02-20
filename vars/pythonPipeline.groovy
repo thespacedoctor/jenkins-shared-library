@@ -182,7 +182,7 @@ def slackMessage(status) {
     def cr = readFile('reports/coverage.txt').trim()
     if(status == "Failed") {
         badgeImage = "https://user-images.githubusercontent.com/7784660/42061581-02169b84-7b2b-11e8-9349-fb2e2c8800f5.png"
-    } esle {
+    } else {
         badgeImage = "https://user-images.githubusercontent.com/7784660/42061710-52037982-7b2b-11e8-9e1c-1f9330e8adbf.png"
     }
 
