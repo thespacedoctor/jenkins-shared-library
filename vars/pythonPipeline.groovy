@@ -42,7 +42,18 @@ def call(body) {
         }
 
         stages {
-            
+
+
+
+            stage ("Code pull"){
+                steps{
+                    checkout scm
+                    script {
+                        buildBadge.setStatus('running')
+                    }
+                }
+            }
+
             stage('test one') {
                 environment {
                     BRANCH_NAME=branchName2()
@@ -63,15 +74,6 @@ def call(body) {
                            '''
                     }
                     
-                }
-            }
-
-            stage ("Code pull"){
-                steps{
-                    checkout scm
-                    script {
-                        buildBadge.setStatus('running')
-                    }
                 }
             }
 
