@@ -45,7 +45,6 @@ def call(body) {
                     checkout scm
                     script {
                         buildBadge.setStatus('running')
-                        slackMessage("test")
                     }
                 }
             }
@@ -178,7 +177,7 @@ String coverageReportUrl() {
 def slackMessage(status) {
 
     badge = buildBadgeUrl()
-    // def cr = readFile('reports/coverage.txt').trim()
+    def cr = readFile('reports/coverage.txt').trim()
     def cr = ""
 
     blocks = [
