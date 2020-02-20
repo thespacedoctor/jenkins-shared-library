@@ -47,6 +47,10 @@ def call(body) {
                     script {
                         buildBadge.setStatus('running')
                     }
+                    sh '''git fetch --all
+                          git remote -v
+                          git panys
+                    '''
                 }
             }
 
@@ -156,6 +160,7 @@ def call(body) {
                 }
                 steps {
                     sh '''git fetch --all
+                          git remote -v
                           git checkout -b develop origin/develop
                           git merge ${env.BRANCH_NAME}
                           git commit -am "Merged ${env.BRANCH_NAME} branch to develop"
