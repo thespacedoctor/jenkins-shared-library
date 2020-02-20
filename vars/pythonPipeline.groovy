@@ -147,7 +147,7 @@ def call(body) {
                 sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all'
             }
             failure {
-                slackSend(channel: "jenkins",blocks: slackMessage("Failed"))
+                slackSend(channel: "jenkins", blocks: slackMessage("Failed"))
             }
         }
     }
@@ -199,6 +199,14 @@ def slackMessage(status) {
             "text": "\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
           ]
         ]
+    ]
+    blocks = [
+        [
+          "type": "section",
+          "text": [
+            "type": "mrkdwn",
+            "text": "small test"
+          ],
     ]
     return blocks
 }
