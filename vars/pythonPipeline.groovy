@@ -37,6 +37,7 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
+          BRANCH_NAME=branchName()
         }
 
         stages {
@@ -59,7 +60,10 @@ def call(body) {
                     }
                 }
                 steps {
+                    this = "${env.BRANCH_NAME}"
                     sh '''echo ${BRANCH_NAME}
+                          echo $this
+                          echo ${env.BRANCH_NAME}
                           echo ${REPO_NAME}
                           echo ${COVERAGE_URL}
                           aahhss
