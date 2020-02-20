@@ -42,7 +42,7 @@ def call(body) {
         }
 
         stages {
-            stage('test') {
+            stage('test one') {
                 when {
                     expression {
                         currentBuild.currentResult == 'SUCCESS'
