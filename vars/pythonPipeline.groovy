@@ -42,11 +42,11 @@ def call(body) {
         }
 
         stages {
-            environment {
-                BRANCH_NAME=branchName2()
-            }
+            
             stage('test one') {
-
+                environment {
+                    BRANCH_NAME=branchName2()
+                }
                 when {
                     expression {
                         currentBuild.currentResult == 'SUCCESS'
