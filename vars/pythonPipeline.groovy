@@ -184,11 +184,11 @@ def slackMessage(status) {
           "type": "section",
           "text": [
             "type": "mrkdwn",
-            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>"
+            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}> ${badge}"
           ],
           "accessory": [
             "type": "image",
-            "image_url": badge,
+            "image_url": "https://s3-media3.fl.yelpcdn.com/bphoto/c7ed05m9lC2EmA3Aruue7A/o.jpg",
             "alt_text": "build badge"
           ]
         ]
