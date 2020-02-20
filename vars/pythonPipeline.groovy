@@ -47,7 +47,7 @@ def call(body) {
                     script {
                         buildBadge.setStatus('running')
                     }
-                    sh '''git remote update
+                    sh '''git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
                           git fetch --all
                           git branch -a
                           git checkout develop
