@@ -156,7 +156,7 @@ def call(body) {
                 }
                 steps {
                     sh '''git fetch --all
-                          git checkout -b develop --track origin/develop
+                          git checkout -b develop origin/develop
                           git merge ${env.BRANCH_NAME}
                           git commit -am "Merged ${env.BRANCH_NAME} branch to develop"
                           git push origin develop
