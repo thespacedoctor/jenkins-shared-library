@@ -222,7 +222,6 @@ def call(body) {
 
 
 String branchName() {
-    this = "${env.BUILD_NUMBER}"
     return scm.getUserRemoteConfigs()[0].getUrl()
 }
 String repoName() {
