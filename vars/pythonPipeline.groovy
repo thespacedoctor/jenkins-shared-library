@@ -49,6 +49,17 @@ def call(body) {
                 }
             }
 
+            stage('Build conda python 2.7 environment & install code') {
+                steps {
+                    sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
+                                  source activate ${BUILD_TAG}-p2
+                                  conda install pytest pandas coverage pytest-cov 
+                                  pip install coverage-badge
+                                  python setup.py install
+                                '''
+                }
+            }
+
             stage('Build conda python 3.7 environment & install code') {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip
@@ -59,20 +70,33 @@ def call(body) {
                         '''
                 }
             }
-            stage('Build conda python 2.7 environment & install code') {
+        
+            stage('Build Docs in Python 3') {
+                steps {
+                    sh  ''' source activate ${BUILD_TAG}-p3
+                            cd docs
+                            pip install -r requirements.txt
+                            make buildapi
+                            make html
+                        '''
+                }
+            }
+            stage('Unit tests for Python 2') {
                 steps {
                     script {
                         try {
-                            sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
-                                  source activate ${BUILD_TAG}-p2
-                                  conda install pytest pandas coverage pytest-cov 
-                                  pip install coverage-badge
-                                  python setup.py install
+                            sh  ''' source activate ${BUILD_TAG}-p2
+                                    pytest --verbose --junit-xml test-reports/unit_tests_p2.xml
                                 '''
                             buildBadge.setStatus('passing')
                         } catch (Exception err) {
-                                buildBadge.setStatus('failing')
+                            buildBadge.setStatus('failing')
                         }
+                }
+                post {
+                    always {
+                        // Archive unit tests for the future
+                        junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p2.xml'
                     }
                 }
             }
@@ -99,19 +123,8 @@ def call(body) {
                     }
                 }
             }
-            stage('Unit tests for Python 2') {
-                steps {
-                    sh  ''' source activate ${BUILD_TAG}-p2
-                            pytest --verbose --junit-xml test-reports/unit_tests_p2.xml
-                        '''
-                }
-                post {
-                    always {
-                        // Archive unit tests for the future
-                        junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p2.xml'
-                    }
-                }
-            }
+            
+
             stage('Convert Coverage Reports for Jenkins') {
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
