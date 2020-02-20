@@ -179,34 +179,25 @@ def slackMessage(status) {
     badge = buildBadgeUrl()
     def cr = readFile('reports/coverage.txt').trim()
 
-    // blocks = [
-    //     [
-    //       "type": "section",
-    //       "text": [
-    //         "type": "mrkdwn",
-    //         "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>"
-    //       ],
-    //       "accessory": [
-    //         "type": "image",
-    //         "image_url": "${badge}",
-    //         "alt_text": "build badge"
-    //       ]
-    //     ],
-    //     [
-    //       "type": "section",
-    //       "text": [
-    //         "type": "mrkdwn",
-    //         "text": "\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
-    //       ]
-    //     ]
-    // ]
     blocks = [
         [
           "type": "section",
           "text": [
             "type": "mrkdwn",
-            "text": "small test"
-            ]
+            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>"
+          ],
+          "accessory": [
+            "type": "image",
+            "image_url": "${badge}",
+            "alt_text": "build badge"
+          ]
+        ],
+        [
+          "type": "section",
+          "text": [
+            "type": "mrkdwn",
+            "text": "\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
+          ]
         ]
     ]
     return blocks
