@@ -66,8 +66,8 @@ def call(body) {
                 steps {
                     script {
                         this = branchName()
+                        echo this
                         sh '''echo ${BRANCH_NAME}
-                              echo $this
                               echo ${REPO_NAME}
                               echo ${COVERAGE_URL}
                               aahhss
