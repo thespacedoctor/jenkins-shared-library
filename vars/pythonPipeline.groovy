@@ -42,7 +42,11 @@ def call(body) {
         }
 
         stages {
+            environment {
+                BRANCH_NAME=branchName2()
+            }
             stage('test one') {
+
                 when {
                     expression {
                         currentBuild.currentResult == 'SUCCESS'
@@ -224,6 +228,9 @@ def call(body) {
 
 String branchName() {
     return scm.getUserRemoteConfigs()[0].getUrl()
+}
+String branchName2() {
+    return "${env.BRANCH_NAME}"
 }
 String repoName() {
     return scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
