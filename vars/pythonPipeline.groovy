@@ -49,6 +49,8 @@ def call(body) {
                     }
                     sh '''git fetch --all
                           git remote -v
+                          git branch
+                          git checkout develop
                           git panys
                     '''
                 }
