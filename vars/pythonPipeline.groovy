@@ -47,8 +47,8 @@ def call(body) {
                     script {
                         buildBadge.setStatus('running')
                     }
-                    sh '''git fetch --all
-                          git remote -v
+                    sh '''git remote update
+                          git fetch --all
                           git branch -a
                           git checkout develop
                           git panys
