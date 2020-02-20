@@ -188,7 +188,7 @@ def slackMessage(status) {
           ],
           "accessory": [
             "type": "image",
-            "image_url": "https://s3-media3.fl.yelpcdn.com/bphoto/c7ed05m9lC2EmA3Aruue7A/o.jpg",
+            "image_url": badge,
             "alt_text": "build badge"
           ]
         ]
