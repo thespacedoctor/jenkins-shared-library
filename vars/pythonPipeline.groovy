@@ -65,7 +65,7 @@ def call(body) {
                 }
                 steps {
                     script {
-                        this = branchName()
+                        this = branchName2()
                         echo this
                         sh '''echo ${BRANCH_NAME}
                               echo ${REPO_NAME}
