@@ -209,9 +209,9 @@ def call(body) {
         }
         post {
             always {
-                slackSend(blocks: slackMessage("Finished Successfully"))
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
                 sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all'
+                slackSend(blocks: slackMessage("Finished Successfully"))
             }
             failure {
                 slackSend(blocks: slackMessage("Failed"))
