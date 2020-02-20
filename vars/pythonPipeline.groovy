@@ -141,12 +141,12 @@ def call(body) {
             // http://167.99.90.204:8080/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline
             // URL ENCODE BRANCH PLEASE: ${env.JENKINS_URL}/blue/organizations/jenkins/${git_repo_name}/${git_branch_name}/${env.BUILD_NUMBER}/pipeline
             always {
-                slackSend message: slackMessage("Finished Successfully")
+                slackSend blocks: slackMessage("Finished Successfully")
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
                 sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all'
             }
             failure {
-                slackSend message: slackMessage("Failed")
+                slackSend blocks: slackMessage("Failed")
             }
         }
     }
@@ -174,9 +174,32 @@ String coverageReportUrl() {
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
 String slackMessage(status) {
+
     badge = buildBadgeUrl()
     def cr = readFile('reports/coverage.txt').trim()
-    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n${badge}\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
+
+    blocks: [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>"
+          },
+          "accessory": {
+            "type": "image",
+            "image_url": "${badge}",
+            "alt_text": "build badge"
+          }
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
+          }
+        }
+    ]
+    return blocks
 }
 String buildBadgeUrl() {
     rn = repoName()
