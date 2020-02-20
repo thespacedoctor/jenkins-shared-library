@@ -33,14 +33,34 @@ def call(body) {
         // SOURCE ANACONDA
         environment {
           PATH="/var/lib/jenkins/anaconda/bin:$PATH"
+          BRANCH_NAME=branchName()
           REPO_NAME=repoName()
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          BRANCH_NAME=branchName()
+          
         }
 
         stages {
+            stage('test') {
+                when {
+                    expression {
+                        currentBuild.currentResult == 'SUCCESS'
+                    }
+                }
+                steps {
+                    script {
+                        this = branchName()
+                        sh '''echo ${BRANCH_NAME}
+                              echo $this
+                              echo ${REPO_NAME}
+                              echo ${COVERAGE_URL}
+                              aahhss
+                           '''
+                    }
+                    
+                }
+            }
 
             stage ("Code pull"){
                 steps{
