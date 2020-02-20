@@ -178,18 +178,32 @@ def slackMessage(status) {
 
     badge = buildBadgeUrl()
     def cr = readFile('reports/coverage.txt').trim()
+    badge = buildBadgeUrl()
+    def cr = readFile('reports/coverage.txt').trim()
+    if(status == "Failed") {
+        badgeImage = "https://user-images.githubusercontent.com/7784660/42061581-02169b84-7b2b-11e8-9349-fb2e2c8800f5.png"
+    } esle {
+        badgeImage = "https://user-images.githubusercontent.com/7784660/42061710-52037982-7b2b-11e8-9e1c-1f9330e8adbf.png"
+    }
 
     blocks = [
         [
           "type": "section",
           "text": [
             "type": "mrkdwn",
-            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}> ${badge}"
+            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>"
           ],
           "accessory": [
             "type": "image",
-            "image_url": "https://s3-media3.fl.yelpcdn.com/bphoto/c7ed05m9lC2EmA3Aruue7A/o.jpg",
+            "image_url": badgeImage,
             "alt_text": "build badge"
+          ]
+        ],
+        [
+          "type": "section",
+          "text": [
+            "type": "mrkdwn",
+            "text": "\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
           ]
         ]
     ]
