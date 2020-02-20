@@ -41,12 +41,25 @@ def call(body) {
         }
 
         stages {
+
             stage ("Code pull"){
                 steps{
                     checkout scm
                     script {
                         buildBadge.setStatus('running')
                     }
+                }
+            }
+            stage('test') {
+                when {
+                    expression {
+                        currentBuild.currentResult == 'SUCCESS'
+                    }
+                }
+                steps {
+                    sh '''echo $BRANCH_NAME
+                          break me
+                       '''
                 }
             }
 
@@ -151,7 +164,7 @@ def call(body) {
             stage('Merge Hotfix/Feature to Development Branch') {
                 when {
                     expression {
-                        BRANCH_NAME ==~ /feature.*/
+                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_NAME ==~ /feature.*/)
                     }
                 }
                 steps {
