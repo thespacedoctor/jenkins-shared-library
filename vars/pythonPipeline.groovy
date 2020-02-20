@@ -179,25 +179,25 @@ String slackMessage(status) {
     def cr = readFile('reports/coverage.txt').trim()
 
     blocks: [
-        {
+        [
           "type": "section",
-          "text": {
+          "text": [
             "type": "mrkdwn",
             "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>"
-          },
-          "accessory": {
+          ],
+          "accessory": [
             "type": "image",
             "image_url": "${badge}",
             "alt_text": "build badge"
-          }
-        },
-        {
+          ]
+        ],
+        [
           "type": "section",
-          "text": {
+          "text": [
             "type": "mrkdwn",
             "text": "\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
-          }
-        }
+          ]
+        ]
     ]
     return blocks
 }
