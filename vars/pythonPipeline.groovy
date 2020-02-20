@@ -50,29 +50,6 @@ def call(body) {
                     }
                 }
             }
-            stage('test') {
-                environment {
-                    BRANCH_NAME=branchName()
-                }
-                when {
-                    expression {
-                        currentBuild.currentResult == 'SUCCESS'
-                    }
-                }
-                steps {
-                    script {
-                        this = branchName()
-                        sh '''echo ${BRANCH_NAME}
-                              echo $this
-                              echo ${env.BRANCH_NAME}
-                              echo ${REPO_NAME}
-                              echo ${COVERAGE_URL}
-                              aahhss
-                           '''
-                    }
-                    
-                }
-            }
 
             stage('Build conda python 2.7 environment & install code') {
                 steps {
@@ -170,6 +147,26 @@ def call(body) {
                                        sourceEncoding: 'ASCII',
                                        zoomCoverageChart: false])
                         }
+                }
+            }
+            stage('test') {
+                when {
+                    expression {
+                        currentBuild.currentResult == 'SUCCESS'
+                    }
+                }
+                steps {
+                    script {
+                        this = branchName()
+                        sh '''echo ${BRANCH_NAME}
+                              echo $this
+                              echo ${env.BRANCH_NAME}
+                              echo ${REPO_NAME}
+                              echo ${COVERAGE_URL}
+                              aahhss
+                           '''
+                    }
+                    
                 }
             }
             stage('Merge Hotfix/Feature to Development Branch') {
