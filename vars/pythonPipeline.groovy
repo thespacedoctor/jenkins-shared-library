@@ -154,7 +154,7 @@ def call(body) {
                         currentBuild.result == 'SUCCESS' && (BRANCH_NAME.contains("feature") || BRANCH_NAME.contains("hotfix"))
                     }
                 }
-                step {
+                steps {
                     sh '''git checkout develop
                           git merge ${env.BRANCH_NAME}
                           git commit -am "Merged ${env.BRANCH_NAME} branch to develop"
