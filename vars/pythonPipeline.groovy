@@ -38,13 +38,9 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          
         }
 
         stages {
-
-
-
             stage ("Code pull"){
                 steps{
                     checkout scm
@@ -62,10 +58,8 @@ def call(body) {
                 }
                 steps {
                     script {
-                        this = branchName2()
+                        this = branchName()
                         echo this
-                        this2 = coverageReportUrl()
-                        echo this2
                         sh '''echo ${BRANCH_NAME}
                               echo ${REPO_NAME}
                               echo ${COVERAGE_URL}
@@ -228,11 +222,8 @@ def call(body) {
 
 
 String branchName() {
+    this = "${env.BUILD_NUMBER}"
     return scm.getUserRemoteConfigs()[0].getUrl()
-}
-String branchName2() {
-    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
-    return "${bn}"
 }
 String repoName() {
     return scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
