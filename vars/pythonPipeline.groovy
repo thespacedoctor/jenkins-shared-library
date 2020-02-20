@@ -42,6 +42,7 @@ def call(body) {
             stage ("Code pull"){
                 steps{
                     checkout scm
+                    buildBadge.setStatus('running')
                 }
             }
 
@@ -101,19 +102,19 @@ def call(body) {
                         '''
                 }
                 post{
-                always{
-                    step([$class: 'CoberturaPublisher',
-                                   autoUpdateHealth: false,
-                                   autoUpdateStability: false,
-                                   coberturaReportFile: 'reports/coverage.xml',
-                                   failNoReports: false,
-                                   failUnhealthy: false,
-                                   failUnstable: false,
-                                   maxNumberOfBuilds: 10,
-                                   onlyStable: false,
-                                   sourceEncoding: 'ASCII',
-                                   zoomCoverageChart: false])
-                    }
+                    always{
+                        step([$class: 'CoberturaPublisher',
+                                       autoUpdateHealth: false,
+                                       autoUpdateStability: false,
+                                       coberturaReportFile: 'reports/coverage.xml',
+                                       failNoReports: false,
+                                       failUnhealthy: false,
+                                       failUnstable: false,
+                                       maxNumberOfBuilds: 10,
+                                       onlyStable: false,
+                                       sourceEncoding: 'ASCII',
+                                       zoomCoverageChart: false])
+                        }
                 }
             }
             
@@ -124,11 +125,13 @@ def call(body) {
             // http://167.99.90.204:8080/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline
             // URL ENCODE BRANCH PLEASE: ${env.JENKINS_URL}/blue/organizations/jenkins/${git_repo_name}/${git_branch_name}/${env.BUILD_NUMBER}/pipeline
             always {
+                buildBadge.setStatus('passing')
                 slackSend message: slackMessage("Finished Successfully")
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
                 sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all'
             }
             failure {
+                buildBadge.setStatus('failing')
                 slackSend message: slackMessage("Failed")
             }
         }
@@ -160,3 +163,5 @@ String slackMessage(status) {
     def cr = readFile('reports/coverage.txt').trim()
     return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
 }
+
+def buildBadge = addEmbeddableBadgeConfiguration()
