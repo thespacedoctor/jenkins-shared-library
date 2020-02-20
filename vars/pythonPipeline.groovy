@@ -58,7 +58,7 @@ def call(body) {
                 }
                 steps {
                     script {
-                        this = branchName()
+                        this = branchName2()
                         echo this
                         sh '''echo ${BRANCH_NAME}
                               echo ${REPO_NAME}
@@ -240,6 +240,11 @@ String coverageReportUrl() {
     rn = repoName()
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
+}
+String branchName2() {
+    rn = repoName()
+    bn = "${env.BRANCH_NAME}"
+    return "${bn}"
 }
 def slackMessage(status) {
 
