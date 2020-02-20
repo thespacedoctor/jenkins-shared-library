@@ -181,7 +181,7 @@ def slackMessage(status) {
     // def cr = readFile('reports/coverage.txt').trim()
     def cr = ""
 
-    blocks: [
+    def blocks: [
         [
           "type": "section",
           "text": [
