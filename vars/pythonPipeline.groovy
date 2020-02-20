@@ -178,7 +178,6 @@ def slackMessage(status) {
 
     badge = buildBadgeUrl()
     def cr = readFile('reports/coverage.txt').trim()
-    def cr = ""
 
     blocks = [
         [
