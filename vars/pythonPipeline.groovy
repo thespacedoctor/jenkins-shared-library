@@ -37,6 +37,7 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
+          BRANCH_NAME=branchName()
         }
 
         stages {
@@ -147,13 +148,22 @@ def call(body) {
                         }
                 }
             }
-            
+            stage('Merge Hotfix/Feature to Development Branch') {
+                when {
+                    expression {
+                        currentBuild.result == 'SUCCESS' && (BRANCH_NAME.contains("feature") || BRANCH_NAME.contains("hotfix"))
+                    }
+                }
+            }
+            step {
+                sh '''git checkout develop
+                      git merge ${env.BRANCH_NAME}
+                      git commit -am "Merged ${env.BRANCH_NAME} branch to develop"
+                      git push origin develop
+                   '''
+            }
         }
         post {
-            // http://167.99.90.204:8080/blue/organizations/jenkins/xxxpython_package_namexxx/detail/feature%2Fadding-jenkins-pipeline/12/pipeline
-            // http://167.99.90.204:8080/blue/organizations/jenkins/xxxpython_package_namexxx/feature%2Fadding-jenkins-pipeline/12/pipeline/
-            // http://167.99.90.204:8080/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline
-            // URL ENCODE BRANCH PLEASE: ${env.JENKINS_URL}/blue/organizations/jenkins/${git_repo_name}/${git_branch_name}/${env.BUILD_NUMBER}/pipeline
             always {
                 slackSend(blocks: slackMessage("Finished Successfully"))
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
