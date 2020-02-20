@@ -142,12 +142,12 @@ def call(body) {
             // http://167.99.90.204:8080/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline
             // URL ENCODE BRANCH PLEASE: ${env.JENKINS_URL}/blue/organizations/jenkins/${git_repo_name}/${git_branch_name}/${env.BUILD_NUMBER}/pipeline
             always {
-                slackSend blocks: slackMessage("Finished Successfully")
+                slackSend(channel: "jenkins", blocks: slackMessage("Finished Successfully"))
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
                 sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all'
             }
             failure {
-                slackSend blocks: slackMessage("Failed")
+                slackSend(channel: "jenkins",blocks: slackMessage("Failed"))
             }
         }
     }
