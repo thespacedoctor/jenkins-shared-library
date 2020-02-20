@@ -195,8 +195,8 @@ def slackMessage(status) {
         ],
         [
             "type": "image",
-            "image_url": badgeImage,
-            "alt_text": "badge image"
+            "image_url": "http://placekitten.com/500/500",
+            "alt_text": "An incredibly cute kitten."
         ],
         [
           "type": "section",
