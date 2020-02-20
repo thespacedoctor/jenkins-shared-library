@@ -58,23 +58,32 @@ def call(body) {
             }
             stage('Build conda python 2.7 environment & install code') {
                 steps {
-                    sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
-                          source activate ${BUILD_TAG}-p2
-                          conda install pytest pandas coverage pytest-cov 
-                          pip install coverage-badge
-                          python setup.py install
-                        '''
+                    try {
+                        sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
+                              source activate ${BUILD_TAG}-p2
+                              conda install pytest pandas coverage pytest-cov 
+                              pip install coverage-badge
+                              python setup.py install
+                            '''
+                        buildBadge.setStatus('passing')
+                        } catch (Exception err) {
+                            buildBadge.setStatus('failing')
+                        }
                 }
             }
             stage('Unit tests for Python 3') {
                 steps {
-                    sh  ''' source activate ${BUILD_TAG}-p3
-                            pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml 
-                            coverage-badge -f -o coverage.svg
-                            which head
-                            which grep
-                            head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" > reports/coverage.txt
-                        '''
+                    try {
+                        sh  ''' source activate ${BUILD_TAG}-p3
+                                pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml 
+                                coverage-badge -f -o coverage.svg
+                                which head
+                                which grep
+                                head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" > reports/coverage.txt
+                            '''
+                    } catch (Exception err) {
+                        buildBadge.setStatus('failing')
+                    }
                 }
                 post {
                     always {
@@ -125,7 +134,7 @@ def call(body) {
             // http://167.99.90.204:8080/blue/organizations/jenkins/${env.JOB_NAME}/${env.BUILD_NUMBER}/pipeline
             // URL ENCODE BRANCH PLEASE: ${env.JENKINS_URL}/blue/organizations/jenkins/${git_repo_name}/${git_branch_name}/${env.BUILD_NUMBER}/pipeline
             always {
-                buildBadge.setStatus('passing')
+                
                 slackSend message: slackMessage("Finished Successfully")
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
                 sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all'
