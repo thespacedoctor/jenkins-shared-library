@@ -45,6 +45,7 @@ def call(body) {
                     checkout scm
                     script {
                         buildBadge.setStatus('running')
+                        slackMessage("test")
                     }
                 }
             }
@@ -116,6 +117,7 @@ def call(body) {
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
                         '''
+
                 }
                 post{
                     always{
