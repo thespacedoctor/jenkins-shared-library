@@ -232,7 +232,8 @@ String branchName() {
     return scm.getUserRemoteConfigs()[0].getUrl()
 }
 String branchName2() {
-    return "${env.BRANCH_NAME}"
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
+    return "${bn}"
 }
 String repoName() {
     return scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
