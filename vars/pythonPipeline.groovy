@@ -55,9 +55,6 @@ def call(body) {
             }
 
             stage('test one') {
-                environment {
-                    BRANCH_NAME=branchName2()
-                }
                 when {
                     expression {
                         currentBuild.currentResult == 'SUCCESS'
@@ -67,6 +64,8 @@ def call(body) {
                     script {
                         this = branchName2()
                         echo this
+                        this2 = coverageReportUrl()
+                        echo this2
                         sh '''echo ${BRANCH_NAME}
                               echo ${REPO_NAME}
                               echo ${COVERAGE_URL}
