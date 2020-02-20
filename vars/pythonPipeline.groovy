@@ -60,14 +60,17 @@ def call(body) {
                     }
                 }
                 steps {
-                    this = "${env.BRANCH_NAME}"
-                    sh '''echo ${BRANCH_NAME}
-                          echo $this
-                          echo ${env.BRANCH_NAME}
-                          echo ${REPO_NAME}
-                          echo ${COVERAGE_URL}
-                          aahhss
-                       '''
+                    script {
+                        this = branchName()
+                        sh '''echo ${BRANCH_NAME}
+                              echo $this
+                              echo ${env.BRANCH_NAME}
+                              echo ${REPO_NAME}
+                              echo ${COVERAGE_URL}
+                              aahhss
+                           '''
+                    }
+                    
                 }
             }
 
