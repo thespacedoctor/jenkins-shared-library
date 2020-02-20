@@ -243,8 +243,10 @@ String coverageReportUrl() {
 }
 String branchName2() {
     rn = repoName()
-    bn = "${env.BRANCH_NAME}"
-    return "${bn}"
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
+    this = "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
+    return this
+
 }
 def slackMessage(status) {
 
