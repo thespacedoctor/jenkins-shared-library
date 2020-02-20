@@ -13,6 +13,7 @@ def call(body) {
     body.resolveStrategy = Closure.DELEGATE_FIRST
     body.delegate = pipelineParams
     body()
+    def buildBadge = addEmbeddableBadgeConfiguration()
 
     pipeline {
 
@@ -177,4 +178,4 @@ String slackMessage(status) {
     return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
 }
 
-def buildBadge = addEmbeddableBadgeConfiguration()
+
