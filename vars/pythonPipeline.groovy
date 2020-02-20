@@ -92,6 +92,7 @@ def call(body) {
                         } catch (Exception err) {
                             buildBadge.setStatus('failing')
                         }
+                    }
                 }
                 post {
                     always {
