@@ -47,12 +47,6 @@ def call(body) {
                     script {
                         buildBadge.setStatus('running')
                     }
-                    sh '''git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
-                          git fetch --all
-                          git branch -a
-                          git checkout develop
-                          git panys
-                    '''
                 }
             }
 
@@ -157,13 +151,14 @@ def call(body) {
             stage('Merge Hotfix/Feature to Development Branch') {
                 when {
                     expression {
-                        currentBuild.currentResult == 'SUCCESS' 
+                        currentBuild.currentResult == 'SUCCESS' && (env.BRANCH_NAME.contains("feature") || env.BRANCH_NAME.contains("hotfix"))
                     }
                 }
                 steps {
-                    sh '''git fetch --all
-                          git remote -v
-                          git checkout -b develop origin/develop
+                    sh '''git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+                          git fetch --all
+                          git branch -a
+                          git checkout develop
                           git merge ${env.BRANCH_NAME}
                           git commit -am "Merged ${env.BRANCH_NAME} branch to develop"
                           git push origin develop
