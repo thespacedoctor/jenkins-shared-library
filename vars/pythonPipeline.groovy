@@ -174,8 +174,14 @@ String coverageReportUrl() {
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
 String slackMessage(status) {
+    badge = buildBadgeUrl()
     def cr = readFile('reports/coverage.txt').trim()
-    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
+    return "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>\n${badge}\n\tBuild ${env.BUILD_NUMBER} ${status}\n\t<${env.COVERAGE_URL}|Coverage Rate = ${cr}>"
+}
+String buildBadgeUrl() {
+    rn = repoName()
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")    
+    return "${env.JENKINS_URL}/buildStatus/icon?job=${rn}%2F${bn}"
 }
 
 
