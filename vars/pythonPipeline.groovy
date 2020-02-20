@@ -151,15 +151,16 @@ def call(body) {
             stage('Merge Hotfix/Feature to Development Branch') {
                 when {
                     expression {
-                        currentBuild.result == 'SUCCESS' && (BRANCH_NAME.contains("feature") || BRANCH_NAME.contains("hotfix"))
+                        currentBuild.result == 'SUCCESS'
                     }
                 }
                 steps {
-                    sh '''git checkout develop
-                          git merge ${env.BRANCH_NAME}
-                          git commit -am "Merged ${env.BRANCH_NAME} branch to develop"
-                          git push origin develop
-                       '''
+                    // sh '''git checkout develop
+                    //       git merge ${env.BRANCH_NAME}
+                    //       git commit -am "Merged ${env.BRANCH_NAME} branch to develop"
+                    //       git push origin develop
+                    //    '''
+                    echo "SHIT"
                 }
             }
 
