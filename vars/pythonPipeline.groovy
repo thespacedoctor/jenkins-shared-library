@@ -38,7 +38,7 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          BRANCH_NAME2=branchName2()
+          BRANCH_NAMEB=branchNameb()
         }
 
         stages {
@@ -60,7 +60,7 @@ def call(body) {
                 steps {
                     script {
                         sh '''echo ${BRANCH_NAME}
-                              echo ${BRANCH_NAME2}
+                              echo ${BRANCH_NAMEB}
                               echo ${REPO_NAME}
                               echo ${COVERAGE_URL}
                               aahhss
@@ -241,7 +241,7 @@ String coverageReportUrl() {
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
-String branchName2() {
+String branchNameb() {
     rn = repoName()
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     this = "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
