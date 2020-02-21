@@ -38,7 +38,7 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          BRANCH_NAMEB=branchName2()
+          BRANCH_NAME2=branchName2()
         }
 
         stages {
@@ -60,7 +60,7 @@ def call(body) {
                 steps {
                     script {
                         sh '''echo ${BRANCH_NAME}
-                              #echo ${BRANCH_NAMEB}
+                              #echo ${BRANCH_NAME2}
                               echo ${REPO_NAME}
                               echo ${COVERAGE_URL}
                               aahhss
@@ -245,7 +245,7 @@ String branchName2() {
     rn = repoName()
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     this = "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
-    return bn
+    return "${bn}"
 }
 def slackMessage(status) {
 
