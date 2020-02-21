@@ -241,12 +241,12 @@ String coverageReportUrl() {
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
-// String branchName2() {
-//     rn = repoName()
-//     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
-//     this = "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
-//     return bn
-// }
+String branchName2() {
+    rn = repoName()
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
+    this = "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
+    return bn
+}
 def slackMessage(status) {
 
     badge = buildBadgeUrl()
