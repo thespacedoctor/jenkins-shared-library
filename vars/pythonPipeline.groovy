@@ -51,6 +51,49 @@ def call(body) {
                 }
             }
 
+            stage('Merge Hotfix/Feature to Development Branch') {
+                when {
+                    expression {
+                        currentBuild.currentResult == 'SUCCESS'
+                    }
+                }
+                steps {
+                    sh '''ashasjs
+                       '''
+                }
+            }
+
+            stage('match branch names') {
+                when {
+                    expression {
+                        BRANCH_NAME ==~ /feature.*/ || BRANCH_NAME ==~ /hotfix.*/
+                    }
+                }
+                steps {
+                    sh '''ashasjs
+                       '''
+                }
+            }
+
+            stage('Merge Hotfix/Feature to Development Branch') {
+                when {
+                    expression {
+                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_NAME ==~ /feature.*/ || BRANCH_NAME ==~ /hotfix.*/)
+                    }
+                }
+                steps {
+                    sh '''ashasjs
+                       '''
+                }
+            }
+
+            stage('GOTCHA') {
+                steps {
+                    sh '''ashasjs
+                       '''
+                }
+            }
+
             stage('Build conda python 2.7 environment & install code') {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
