@@ -38,7 +38,7 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          FART=branchName2()
+          BRANCH_MATCH=branchName2()
         }
 
         stages {
@@ -48,50 +48,6 @@ def call(body) {
                     script {
                         buildBadge.setStatus('running')
                     }
-                }
-            }
-
-            stage('result match') {
-                when {
-                    expression {
-                        currentBuild.currentResult == 'SUCCESS'
-                    }
-                }
-                steps {
-                    echo FART
-                    sh '''echo "nice"
-                       '''
-                }
-            }
-
-            stage('match branch names') {
-                when {
-                    expression {
-                        FART ==~ /feature.*/ || FART ==~ /hotfix.*/
-                    }
-                }
-                steps {
-                    sh '''ashasjs
-                       '''
-                }
-            }
-
-            stage('match result and branch') {
-                when {
-                    expression {
-                        currentBuild.currentResult == 'SUCCESS' && (FART ==~ /feature.*/ || FART ==~ /hotfix.*/)
-                    }
-                }
-                steps {
-                    sh '''ashasjs
-                       '''
-                }
-            }
-
-            stage('GOTCHA') {
-                steps {
-                    sh '''ashasjs
-                       '''
                 }
             }
 
@@ -197,7 +153,7 @@ def call(body) {
             stage('Merge Hotfix/Feature to Development Branch') {
                 when {
                     expression {
-                        currentBuild.currentResult == 'SUCCESS' && (FART ==~ /feature.*/ || FART ==~ /hotfix.*/)
+                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /feature.*/ || BRANCH_MATCH ==~ /hotfix.*/)
                     }
                 }
                 steps {
@@ -205,8 +161,8 @@ def call(body) {
                           git fetch --all
                           git branch -a
                           git checkout develop
-                          git merge ${env.FART}
-                          git commit -am "Merged ${env.FART} branch to develop"
+                          git merge ${env.BRANCH_MATCH}
+                          git commit -am "Merged ${env.BRANCH_MATCH} branch to develop"
                           git push origin develop
                        '''
                 }
