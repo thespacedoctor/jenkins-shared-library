@@ -157,6 +157,7 @@ def call(body) {
                     }
                 }
                 steps {
+                    sshagent (credentials: ['SSH_Key']) {
                     sh '''git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
                           git fetch --all
                           git commit -am "adding files generated during build"
@@ -166,6 +167,9 @@ def call(body) {
                           git commit -am "Merged ${BRANCH_MATCH} branch to develop" || true
                           git push origin develop
                        '''
+                    }
+
+
                 }
             }
 
