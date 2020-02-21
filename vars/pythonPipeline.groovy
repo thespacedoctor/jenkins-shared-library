@@ -75,7 +75,7 @@ def call(body) {
                 }
             }
 
-            stage('Merge Hotfix/Feature to Development Branch') {
+            stage('match result and branch') {
                 when {
                     expression {
                         currentBuild.currentResult == 'SUCCESS' && (BRANCH_NAME ==~ /feature.*/ || BRANCH_NAME ==~ /hotfix.*/)
