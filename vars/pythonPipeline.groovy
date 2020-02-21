@@ -245,8 +245,7 @@ String coverageReportUrl() {
 }
 String branchName2() {
     rn = repoName()
-    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
-    return "${bn}"
+    return "${env.BRANCH_NAME}"
 }
 def slackMessage(status) {
 
