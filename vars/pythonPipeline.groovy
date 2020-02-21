@@ -158,15 +158,16 @@ def call(body) {
                 }
                 steps {
                     sshagent (credentials: ['SSH_Key']) {
-                    sh '''git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
-                          git fetch --all
-                          git commit -am "adding files generated during build"
-                          git branch -a
-                          git checkout develop
-                          git merge ${BRANCH_MATCH}
-                          git commit -am "Merged ${BRANCH_MATCH} branch to develop" || true
-                          git push origin develop
-                       '''
+                        sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
+                              git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+                              git fetch --all
+                              git commit -am "adding files generated during build"
+                              git branch -a
+                              git checkout develop
+                              git merge ${BRANCH_MATCH}
+                              git commit -am "Merged ${BRANCH_MATCH} branch to develop" || true
+                              git push origin develop
+                           '''
                     }
 
 
