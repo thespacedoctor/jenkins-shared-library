@@ -58,6 +58,7 @@ def call(body) {
                     }
                 }
                 steps {
+                    echo BRANCH_NAME
                     sh '''echo "nice"
                        '''
                 }
