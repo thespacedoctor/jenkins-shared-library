@@ -159,6 +159,7 @@ def call(body) {
                 steps {
                     sh '''git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
                           git fetch --all
+                          git commit -am "adding files generated during build"
                           git branch -a
                           git checkout develop
                           git merge ${BRANCH_MATCH}
