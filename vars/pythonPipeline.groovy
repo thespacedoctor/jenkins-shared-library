@@ -5,7 +5,7 @@
 //     myParam2 = 'someVal2'
 // }
 
-
+import java.lang.Math;
 
 def call(body) {
     // EVALUATE THE BODY BLOCK, AND COLLECT CONFIGURATION INTO THE OBJECT
@@ -217,8 +217,7 @@ def slackMessage(status) {
 
     badge = buildBadgeUrl()
     def crStr = readFile('reports/coverage.txt').trim()
-    cr = crStr
-    // int cr = floor(Double.valueOf(crStr)*100.0);
+    int cr = Math.floor(Double.valueOf(crStr)*100.0);
 
     if(status == "Failed") {
         badgeImage = "https://raster.shields.io/badge/build-failed-red.png"
@@ -239,35 +238,7 @@ def slackMessage(status) {
           "type": "section",
           "text": [
             "type": "mrkdwn",
-            "text": "REPO: **<${env.OVERVIEW_URL}|${env.REPO_NAME}>**"
-          ],
-        ],
-        [
-          "type": "section",
-          "text": [
-            "type": "mrkdwn",
-            "text": "BRANCH: **<${env.BUILD_URL}|${env.BRANCH_MATCH}>**"
-          ],
-        ],
-        [
-          "type": "section",
-          "text": [
-            "type": "mrkdwn",
-            "text": "BUILD: **#${env.BUILD_NUMBER}**"
-          ],
-        ],
-        [
-          "type": "section",
-          "text": [
-            "type": "mrkdwn",
-            "text": "TEST COVERAGE: **${cr}**"
-          ],
-        ],
-        [
-          "type": "section",
-          "text": [
-            "type": "mrkdwn",
-            "text": "STATUS: **${status}**"
+            "text": "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}*\nSTATUS: *${status}*"
           ],
         ]
     ]
