@@ -157,7 +157,7 @@ def call(body) {
                     }
                 }
                 steps {
-                    sshagent (credentials: ['SSH_Key']) {
+                    sshagent (credentials: ['jenkins-generated-ssh-key']) {
                         sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
                               git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
                               git fetch --all
