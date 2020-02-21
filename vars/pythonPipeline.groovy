@@ -33,13 +33,12 @@ def call(body) {
         // SOURCE ANACONDA
         environment {
           PATH="/var/lib/jenkins/anaconda/bin:$PATH"
-          BRANCH_NAME=branchName()
+          BRANCH=branchName()
           REPO_NAME=repoName()
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          BRANCH_NAME2=branchName2()
-          BRANCH_NAME3=coverageReportUrl()
+          BRANCH_NAME=branchName2()
         }
 
         stages {
@@ -49,26 +48,6 @@ def call(body) {
                     script {
                         buildBadge.setStatus('running')
                     }
-                }
-            }
-
-            stage('test one') {
-                when {
-                    expression {
-                        currentBuild.currentResult == 'SUCCESS'
-                    }
-                }
-                steps {
-                    script {
-                        sh '''echo ${BRANCH_NAME}
-                              echo ${BRANCH_NAME2}
-                              echo ${BRANCH_NAME3}
-                              echo ${REPO_NAME}
-                              echo ${COVERAGE_URL}
-                              aahhss
-                           '''
-                    }
-                    
                 }
             }
 
@@ -179,9 +158,9 @@ def call(body) {
                 steps {
                     script {
                         this = branchName()
-                        sh '''echo ${BRANCH_NAME}
+                        sh '''echo ${BRANCH}
                               echo $this
-                              echo ${env.BRANCH_NAME}
+                              echo ${env.BRANCH}
                               echo ${REPO_NAME}
                               echo ${COVERAGE_URL}
                               aahhss
@@ -193,7 +172,7 @@ def call(body) {
             stage('Merge Hotfix/Feature to Development Branch') {
                 when {
                     expression {
-                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_NAME ==~ /feature.*/)
+                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_NAME ==~ /feature.*/ || BRANCH_NAME ==~ /hotfix.*/)
                     }
                 }
                 steps {
@@ -235,17 +214,17 @@ String activityUrl() {
 }
 String buildUrl() {
     rn = repoName()
-    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
+    bn = "${env.BRANCH}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/blue/organizations/jenkins/${rn}/detail/${bn}/${env.BUILD_NUMBER}/pipeline"
 }
 String coverageReportUrl() {
     rn = repoName()
-    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
+    bn = "${env.BRANCH}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
 String branchName2() {
     rn = repoName()
-    return "${env.BRANCH_NAME}"
+    return "${env.BRANCH}"
 }
 def slackMessage(status) {
 
@@ -263,7 +242,7 @@ def slackMessage(status) {
           "type": "section",
           "text": [
             "type": "mrkdwn",
-            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>"
+            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH}>"
           ],
         ],
         [
@@ -283,7 +262,7 @@ def slackMessage(status) {
 }
 String buildBadgeUrl() {
     rn = repoName()
-    bn = "${env.BRANCH_NAME}".replaceAll("/","%252F")    
+    bn = "${env.BRANCH}".replaceAll("/","%252F")    
     return "${env.JENKINS_URL}/buildStatus/icon?job=${rn}%2F${bn}"
 }
 
