@@ -58,7 +58,7 @@ def call(body) {
                     }
                 }
                 steps {
-                    sh '''ashasjs
+                    sh '''echo "nice"
                        '''
                 }
             }
