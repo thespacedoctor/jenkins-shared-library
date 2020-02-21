@@ -51,7 +51,7 @@ def call(body) {
                 }
             }
 
-            stage('Merge Hotfix/Feature to Development Branch') {
+            stage('result match') {
                 when {
                     expression {
                         currentBuild.currentResult == 'SUCCESS'
