@@ -38,7 +38,7 @@ def call(body) {
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          // BRANCH_NAMEB=branchName2()
+          BRANCH_NAMEB=branchName2()
         }
 
         stages {
