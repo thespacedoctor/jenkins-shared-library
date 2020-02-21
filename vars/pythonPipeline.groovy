@@ -163,7 +163,7 @@ def call(body) {
                           git branch -a
                           git checkout develop
                           git merge ${BRANCH_MATCH}
-                          git commit -am "Merged ${BRANCH_MATCH} branch to develop"
+                          git commit -am "Merged ${BRANCH_MATCH} branch to develop" || true
                           git push origin develop
                        '''
                 }
