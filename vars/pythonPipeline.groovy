@@ -217,8 +217,8 @@ def slackMessage(status) {
 
     badge = buildBadgeUrl()
     def crStr = readFile('reports/coverage.txt').trim()
-
-    int cr = floor(Double.valueOf(crStr)*100.0);
+    cr = crStr
+    // int cr = floor(Double.valueOf(crStr)*100.0);
 
     if(status == "Failed") {
         badgeImage = "https://raster.shields.io/badge/build-failed-red.png"
@@ -227,6 +227,9 @@ def slackMessage(status) {
     }
 
     blocks = [
+        [
+          "type": "divider"
+        ],
         [
             "type": "image",
             "image_url": badgeImage,
@@ -264,7 +267,7 @@ def slackMessage(status) {
           "type": "section",
           "text": [
             "type": "mrkdwn",
-            "text": "STATUS: ${status}"
+            "text": "STATUS: **${status}**"
           ],
         ]
     ]
