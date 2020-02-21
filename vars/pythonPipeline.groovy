@@ -161,8 +161,8 @@ def call(body) {
                           git fetch --all
                           git branch -a
                           git checkout develop
-                          git merge ${env.BRANCH_MATCH}
-                          git commit -am "Merged ${env.BRANCH_MATCH} branch to develop"
+                          git merge ${BRANCH_MATCH}
+                          git commit -am "Merged ${BRANCH_MATCH} branch to develop"
                           git push origin develop
                        '''
                 }
