@@ -149,26 +149,7 @@ def call(body) {
                         }
                 }
             }
-            stage('test') {
-                when {
-                    expression {
-                        currentBuild.currentResult == 'SUCCESS'
-                    }
-                }
-                steps {
-                    script {
-                        this = branchName()
-                        sh '''echo ${BRANCH}
-                              echo $this
-                              echo ${env.BRANCH}
-                              echo ${REPO_NAME}
-                              echo ${COVERAGE_URL}
-                              aahhss
-                           '''
-                    }
-                    
-                }
-            }
+
             stage('Merge Hotfix/Feature to Development Branch') {
                 when {
                     expression {
