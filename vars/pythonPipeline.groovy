@@ -33,12 +33,12 @@ def call(body) {
         // SOURCE ANACONDA
         environment {
           PATH="/var/lib/jenkins/anaconda/bin:$PATH"
-          BRANCH=branchName()
+          BRANCH_NAME=branchName()
           REPO_NAME=repoName()
           OVERVIEW_URL=activityUrl()
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
-          BRANCH_NAME=branchName2()
+          FART=branchName2()
         }
 
         stages {
@@ -58,8 +58,8 @@ def call(body) {
                     }
                 }
                 steps {
-                    echo BRANCH_NAME
-                    sh '''echo "${BRANCH_NAME}"
+                    echo FART
+                    sh '''echo "nice"
                        '''
                 }
             }
@@ -67,7 +67,7 @@ def call(body) {
             stage('match branch names') {
                 when {
                     expression {
-                        BRANCH_NAME ==~ /feature.*/ || BRANCH_NAME ==~ /hotfix.*/
+                        FART ==~ /feature.*/ || FART ==~ /hotfix.*/
                     }
                 }
                 steps {
@@ -79,7 +79,7 @@ def call(body) {
             stage('match result and branch') {
                 when {
                     expression {
-                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_NAME ==~ /feature.*/ || BRANCH_NAME ==~ /hotfix.*/)
+                        currentBuild.currentResult == 'SUCCESS' && (FART ==~ /feature.*/ || FART ==~ /hotfix.*/)
                     }
                 }
                 steps {
@@ -197,7 +197,7 @@ def call(body) {
             stage('Merge Hotfix/Feature to Development Branch') {
                 when {
                     expression {
-                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_NAME ==~ /feature.*/ || BRANCH_NAME ==~ /hotfix.*/)
+                        currentBuild.currentResult == 'SUCCESS' && (FART ==~ /feature.*/ || FART ==~ /hotfix.*/)
                     }
                 }
                 steps {
@@ -205,8 +205,8 @@ def call(body) {
                           git fetch --all
                           git branch -a
                           git checkout develop
-                          git merge ${env.BRANCH_NAME}
-                          git commit -am "Merged ${env.BRANCH_NAME} branch to develop"
+                          git merge ${env.FART}
+                          git commit -am "Merged ${env.FART} branch to develop"
                           git push origin develop
                        '''
                 }
@@ -239,17 +239,17 @@ String activityUrl() {
 }
 String buildUrl() {
     rn = repoName()
-    bn = "${env.BRANCH}".replaceAll("/","%2F")
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/blue/organizations/jenkins/${rn}/detail/${bn}/${env.BUILD_NUMBER}/pipeline"
 }
 String coverageReportUrl() {
     rn = repoName()
-    bn = "${env.BRANCH}".replaceAll("/","%2F")
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/job/${rn}/job/${bn}/${env.BUILD_NUMBER}/cobertura/"
 }
 String branchName2() {
     rn = repoName()
-    return "${env.BRANCH}"
+    return "${env.BRANCH_NAME}"
 }
 def slackMessage(status) {
 
@@ -267,7 +267,7 @@ def slackMessage(status) {
           "type": "section",
           "text": [
             "type": "mrkdwn",
-            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH}>"
+            "text": "<${env.OVERVIEW_URL}|${env.REPO_NAME}> / <${env.BUILD_URL}|${env.BRANCH_NAME}>"
           ],
         ],
         [
@@ -287,7 +287,7 @@ def slackMessage(status) {
 }
 String buildBadgeUrl() {
     rn = repoName()
-    bn = "${env.BRANCH}".replaceAll("/","%252F")    
+    bn = "${env.BRANCH_NAME}".replaceAll("/","%252F")    
     return "${env.JENKINS_URL}/buildStatus/icon?job=${rn}%2F${bn}"
 }
 
