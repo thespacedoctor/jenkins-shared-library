@@ -59,7 +59,7 @@ def call(body) {
                 }
                 steps {
                     echo BRANCH_NAME
-                    sh '''echo "nice"
+                    sh '''echo "${BRANCH_NAME}"
                        '''
                 }
             }
