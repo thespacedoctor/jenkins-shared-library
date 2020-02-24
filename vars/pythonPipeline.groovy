@@ -55,7 +55,7 @@ def call(body) {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
                                   source activate ${BUILD_TAG}-p2
-                                  conda install pytest pandas coverage pytest-cov 
+                                  conda install pytest pandas coverage pytest-cov pathlib
                                   pip install coverage-badge
                                   python setup.py install
                                 '''
@@ -66,7 +66,7 @@ def call(body) {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip
                           source activate ${BUILD_TAG}-p3 
-                          conda install pytest coverage pytest-cov
+                          conda install pytest coverage pytest-cov pathlib
                           pip install coverage-badge
                           python setup.py install
                         '''
