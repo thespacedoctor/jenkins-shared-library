@@ -59,7 +59,6 @@ def call(body) {
                                   pip install coverage-badge
                                   python setup.py install
                                 '''
-                    }
                 }
             }
 
