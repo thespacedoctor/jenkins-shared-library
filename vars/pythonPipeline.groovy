@@ -216,13 +216,15 @@ String branchName2() {
 def slackMessage(status) {
 
     badge = buildBadgeUrl()
-    def crStr = readFile('reports/coverage.txt').trim()
-    int cr = Math.floor(Double.valueOf(crStr)*100.0);
-
+    
     if(status == "Failed") {
         badgeImage = "https://raster.shields.io/badge/build-failed-red.png"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
     } else {
+        def crStr = readFile('reports/coverage.txt').trim()
+        int cr = Math.floor(Double.valueOf(crStr)*100.0);
         badgeImage = "https://raster.shields.io/badge/build-passing-success.png"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*"
     }
 
     blocks = [
@@ -238,7 +240,7 @@ def slackMessage(status) {
           "type": "section",
           "text": [
             "type": "mrkdwn",
-            "text": "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*"
+            "text": message
           ],
         ]
     ]
