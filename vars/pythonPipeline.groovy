@@ -84,6 +84,7 @@ def call(body) {
                         '''
                 }
             }
+
             stage('Unit tests for Python 2') {
                 steps {
                     script {
@@ -104,6 +105,7 @@ def call(body) {
                     }
                 }
             }
+
             stage('Unit tests for Python 3') {
                 steps {
                     script {
@@ -181,10 +183,15 @@ def call(body) {
             always {
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
                 sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all'
-                slackSend(blocks: slackMessage("Finished Successfully"))
             }
             failure {
                 slackSend(blocks: slackMessage("Failed"))
+            }
+            success {
+                slackSend(blocks: slackMessage("Finished Successfully"))
+            }
+            unstable {
+                slackSend(blocks: slackMessage("Unstable"))
             }
         }
     }
@@ -221,6 +228,9 @@ def slackMessage(status) {
     
     if(status == "Failed") {
         badgeImage = "https://raster.shields.io/badge/build-failed-red.png"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
+    } else if(status == "Unstable") {
+        badgeImage = "https://raster.shields.io/static/v1?label=build&message=unstable&color=orange"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
     } else {
         def crStr = readFile('reports/coverage.txt').trim()
