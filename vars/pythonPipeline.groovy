@@ -56,6 +56,7 @@ def call(body) {
                     sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
                                   source activate ${BUILD_TAG}-p2
                                   conda install pytest pandas coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
+                                  ${EXTRA_CONDA_INSTALL_COMMANDS}
                                   pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                                   python setup.py install
                                 '''
@@ -67,6 +68,7 @@ def call(body) {
                     sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
+                          ${EXTRA_CONDA_INSTALL_COMMANDS}
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                           python setup.py install
                         '''
