@@ -54,7 +54,7 @@ def call(body) {
             stage('Build conda python 2.7 environment & install code') {
                 when {
                     expression {
-                        PYTHON2 == '' || PYTHON2 == TRUE
+                        PYTHON2 == '' || PYTHON2 == true
                     }
                 }
                 steps {
@@ -93,7 +93,7 @@ def call(body) {
             stage('Unit tests for Python 2') {
                 when {
                     expression {
-                        PYTHON2 == '' || PYTHON2 == TRUE
+                        PYTHON2 == '' || PYTHON2 == true
                     }
                 }
                 steps {
