@@ -52,6 +52,11 @@ def call(body) {
             }
 
             stage('Build conda python 2.7 environment & install code') {
+                when {
+                    expression {
+                        PYTHON2 == '' || PYTHON2 == "TRUE"
+                    }
+                }
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
                                   source activate ${BUILD_TAG}-p2
@@ -86,6 +91,11 @@ def call(body) {
             }
 
             stage('Unit tests for Python 2') {
+                when {
+                    expression {
+                        PYTHON2 == '' || PYTHON2 == "TRUE"
+                    }
+                }
                 steps {
                     script {
                         try {
@@ -182,7 +192,7 @@ def call(body) {
         post {
             always {
                 sh 'conda remove --yes -n ${BUILD_TAG}-p3 --all'
-                sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all'
+                sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all || true'
             }
             failure {
                 slackSend(blocks: slackMessage("Failed"))
