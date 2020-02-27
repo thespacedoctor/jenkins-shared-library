@@ -44,11 +44,11 @@ def call(body) {
         stages {
             stage ("Code pull") {
                 steps{
-                    checkout scm
                     script {
-                        slackMessage('running')
+                        slackSend(blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
                     }
+                    checkout scm
                 }
             }
 
