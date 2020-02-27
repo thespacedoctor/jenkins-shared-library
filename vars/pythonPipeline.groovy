@@ -46,6 +46,7 @@ def call(body) {
                 steps{
                     checkout scm
                     script {
+                        slackMessage('running')
                         buildBadge.setStatus('running')
                     }
                 }
@@ -283,6 +284,9 @@ def slackMessage(status) {
     } else if(status == "Unstable") {
         badgeImage = "https://raster.shields.io/static/v1?label=build&message=unstable&color=orange"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
+    } else if(status == "running")
+        badgeImage = "https://raster.shields.io/static/v1?label=build&message=running&color=purple"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"  
     } else {
         def crStr = readFile('reports/coverage.txt').trim()
         int cr = Math.floor(Double.valueOf(crStr)*100.0);
