@@ -45,7 +45,7 @@ def call(body) {
             stage ("Code pull") {
                 steps{
                     script {
-                        slackSend(message: "${env.REPO_NAME} build running".toLowerCase(), blocks: slackMessage('running'))
+                        slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
                     }
                     checkout scm
@@ -237,13 +237,13 @@ def call(body) {
                 sh 'conda remove --yes -n ${BUILD_TAG}-p2 --all || true'
             }
             failure {
-                slackSend(blocks: slackMessage("Failed"))
+                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build failed".toLowerCase(), blocks: slackMessage("Failed"))
             }
             success {
-                slackSend(blocks: slackMessage("Finished Successfully"))
+                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build successful".toLowerCase(), blocks: slackMessage("Finished Successfully"))
             }
             unstable {
-                slackSend(blocks: slackMessage("Unstable"))
+                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build unstable".toLowerCase(), blocks: slackMessage("Unstable"))
             }
         }
     }
@@ -277,7 +277,6 @@ String branchName2() {
 def slackMessage(status) {
 
     badge = buildBadgeUrl()
-    headline = "${env.REPO_NAME} build ${status}".toLowerCase()
     if(status == "Failed") {
         badgeImage = "https://raster.shields.io/badge/build-failed-red.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
@@ -295,13 +294,6 @@ def slackMessage(status) {
     }
 
     blocks = [
-        [
-          "type": "context",
-          "elements": [[
-            "type": "mrkdwn",
-            "text": headline
-          ]],
-        ],
         [
             "type": "image",
             "image_url": badgeImage,
