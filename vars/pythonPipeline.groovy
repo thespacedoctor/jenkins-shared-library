@@ -296,8 +296,8 @@ def slackMessage(status) {
 
     blocks = [
         [
-          "type": "section",
-          "text": [
+          "type": "context",
+          "elements": [
             "type": "mrkdwn",
             "text": headline
           ],
