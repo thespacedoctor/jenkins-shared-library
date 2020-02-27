@@ -285,7 +285,7 @@ def slackMessage(status) {
         badgeImage = "https://raster.shields.io/static/v1?label=build&message=unstable&color=orange"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
     } else if(status == "running") {
-        badgeImage = "https://raster.shields.io/static/v1?label=build&message=running&color=purple"
+        badgeImage = "https://raster.shields.io/static/v1?label=build&message=running&color=blueviolet"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"  
     } else {
         def crStr = readFile('reports/coverage.txt').trim()
