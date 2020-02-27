@@ -282,11 +282,10 @@ def slackMessage(status) {
         badgeImage = "https://raster.shields.io/badge/build-failed-red.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
     } else if(status == "Unstable") {
-        badgeImage = "https://raster.shields.io/static/v1?label=build&message=unstable&color=orange"
+        badgeImage = "https://raster.shields.io/badge/build-unstable-orange"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
     } else if(status == "running") {
-        badgeImage = "https://raster.shields.io/static/v1?label=build&message=running&color=blueviolet"
-        badgeImage = "https://raster.shields.io/badge/build-failed-red.png"
+        badgeImage = "https://raster.shields.io/badge/build-running-blueviolet"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"  
     } else {
         def crStr = readFile('reports/coverage.txt').trim()
