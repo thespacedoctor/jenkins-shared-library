@@ -277,7 +277,7 @@ String branchName2() {
 def slackMessage(status) {
 
     badge = buildBadgeUrl()
-    
+    headline = "${env.REPO_NAME} build ${status}".toLowerCase()
     if(status == "Failed") {
         badgeImage = "https://raster.shields.io/badge/build-failed-red.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
@@ -296,7 +296,11 @@ def slackMessage(status) {
 
     blocks = [
         [
-          "type": "divider"
+          "type": "section",
+          "text": [
+            "type": "mrkdwn",
+            "text": headline
+          ],
         ],
         [
             "type": "image",
@@ -309,6 +313,9 @@ def slackMessage(status) {
             "type": "mrkdwn",
             "text": message
           ],
+        ],
+        [
+          "type": "divider"
         ]
     ]
     return blocks
