@@ -45,7 +45,7 @@ def call(body) {
             stage ("Code pull") {
                 steps{
                     script {
-                        slackSend(blocks: slackMessage('running'))
+                        slackSend(message: "${env.REPO_NAME} build running".toLowerCase(), blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
                     }
                     checkout scm
