@@ -70,7 +70,7 @@ def call(body) {
 
             stage('Build conda python 3.7 environment & install code') {
                 steps {
-                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip
+                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
@@ -183,8 +183,49 @@ def call(body) {
                               git push origin develop
                            '''
                     }
+                }
+            }
 
+            stage('Merge Release to Development & Master Branches') {
+                when {
+                    expression {
+                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /release.*/)
+                    }
+                }
+                steps {
+                    sshagent (credentials: ['jenkins-generated-ssh-key']) {
+                        sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
+                              git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+                              git fetch --all
+                              git commit -am "adding files generated during build"
+                              git branch -a
+                              git checkout master
+                              git merge ${BRANCH_MATCH}
+                              git commit -am "Merged ${BRANCH_MATCH} branch to master" || true
+                              git push origin master
+                              git checkout develop
+                              git merge ${BRANCH_MATCH}
+                              git commit -am "Merged ${BRANCH_MATCH} branch to develop" || true
+                              git push origin develop
+                           '''
+                    }
+                }
+            }
 
+            stage('Build and push master branch to PyPI') {
+                when {
+                    expression {
+                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /master/)
+                    }
+                }
+                steps {
+                    sshagent (credentials: ['jenkins-generated-ssh-key']) {
+                        sh '''source activate ${BUILD_TAG}-p3
+                              python setup.py sdist
+                              python setup.py bdist_wheel
+                              twine upload --skip-existing dist/*
+                           '''
+                    }
                 }
             }
 
