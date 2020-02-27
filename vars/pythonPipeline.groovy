@@ -284,7 +284,7 @@ def slackMessage(status) {
     } else if(status == "Unstable") {
         badgeImage = "https://raster.shields.io/static/v1?label=build&message=unstable&color=orange"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
-    } else if(status == "running")
+    } else if(status == "running") {
         badgeImage = "https://raster.shields.io/static/v1?label=build&message=running&color=purple"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"  
     } else {
