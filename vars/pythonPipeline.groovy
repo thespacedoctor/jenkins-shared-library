@@ -82,6 +82,11 @@ def call(body) {
             }
         
             stage('Build Docs in Python 3') {
+                when {
+                    expression {
+                        TESTDOCS == '' || TESTDOCS == true || TESTDOCS == 'true'
+                    }
+                }
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
                             cd docs
