@@ -283,18 +283,18 @@ def slackMessage(status) {
 
     badge = buildBadgeUrl()
     if(status == "Failed") {
-        badgeImage = "https://raster.shields.io/badge/build-failed-red.png"
+        badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-failed-red.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
     } else if(status == "Unstable") {
-        badgeImage = "https://raster.shields.io/badge/build-unstable-orange"
+        badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-unstable-orange.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"
     } else if(status == "running") {
-        badgeImage = "https://raster.shields.io/badge/build-running-blueviolet"
+        badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-running-blueviolet.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*"  
     } else {
         def crStr = readFile('reports/coverage.txt').trim()
         int cr = Math.floor(Double.valueOf(crStr)*100.0);
-        badgeImage = "https://raster.shields.io/badge/build-passing-success.png"
+        badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-passing-success.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*"
     }
 
