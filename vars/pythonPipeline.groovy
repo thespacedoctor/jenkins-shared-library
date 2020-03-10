@@ -94,7 +94,7 @@ def call(body) {
             stage('Unit tests for Python 2') {
                 when {
                     expression {
-                        PYTHON2 == '' || PYTHON2 == true
+                        PYTHON2 == '' || PYTHON2 == true || PYTHON2 == 'true'
                     }
                 }
                 steps {
