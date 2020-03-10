@@ -55,7 +55,7 @@ def call(body) {
             stage('Build conda python 2.7 environment & install code') {
                 when {
                     expression {
-                        PYTHON2 == '' || PYTHON2 == true
+                        PYTHON2 == '' || PYTHON2 == true || PYTHON2 == 'true'
                     }
                 }
                 steps {
