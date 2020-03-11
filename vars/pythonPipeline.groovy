@@ -59,12 +59,14 @@ def call(body) {
                     }
                 }
                 steps {
-                    sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip
+                    sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip 
                                   source activate ${BUILD_TAG}-p2
                                   conda install pytest pandas coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
                                   ${EXTRA_CONDA_INSTALL_COMMANDS}
                                   pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                                   python setup.py install
+                                  cd docs
+                                  pip install -r requirements.txt
                                 '''
                 }
             }
