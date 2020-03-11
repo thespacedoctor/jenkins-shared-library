@@ -65,8 +65,6 @@ def call(body) {
                                   ${EXTRA_CONDA_INSTALL_COMMANDS}
                                   pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                                   python setup.py install
-                                  cd docs
-                                  pip install -r requirements.txt
                                 '''
                 }
             }
