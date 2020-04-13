@@ -55,9 +55,10 @@ def call(body) {
                               echo ${pwd}
                               git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
                               git submodule update --remote
-                              shit
                            '''
                     } 
+                    echo "${ls}"
+                    sh '''shit'''
                 }
             }
 
