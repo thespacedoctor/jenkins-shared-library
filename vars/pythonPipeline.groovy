@@ -57,7 +57,7 @@ def call(body) {
                               git submodule update --remote
                            '''
                     } 
-                    echo "${ls}"
+                    echo '''${ls}'''
                     sh '''shit'''
                 }
             }
