@@ -48,8 +48,7 @@ def call(body) {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
                     }
-                    checkout scm
-                    sh '''git submodule update --remote'''
+                    checkout scm                    
                 }
             }
 
@@ -90,6 +89,7 @@ def call(body) {
                 }
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
+                            git submodule update --remote
                             cd docs
                             pip install -r requirements.txt
                             make html
