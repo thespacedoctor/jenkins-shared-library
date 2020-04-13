@@ -49,6 +49,7 @@ def call(body) {
                         buildBadge.setStatus('running')
                     }
                     checkout scm
+                    sh '''git submodule update --remote'''
                 }
             }
 
