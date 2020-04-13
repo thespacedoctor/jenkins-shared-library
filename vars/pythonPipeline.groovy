@@ -48,7 +48,12 @@ def call(body) {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
                     }
-                    checkout scm                    
+                    checkout scm 
+                    sshagent (credentials: ['jenkins-generated-ssh-key']) {
+                        sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
+                              git submodule update --remote
+                           '''
+                    }                   
                 }
             }
 
@@ -89,7 +94,6 @@ def call(body) {
                 }
                 steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
-                            git submodule update --remote
                             cd docs
                             pip install -r requirements.txt
                             make html
