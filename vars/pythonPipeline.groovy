@@ -50,10 +50,12 @@ def call(body) {
                     }
                     checkout scm 
                     sshagent (credentials: ['jenkins-generated-ssh-key']) {
-                        sh '''cd $REPO_NAME
+                        sh '''echo ${ls}
+                              cd $REPO_NAME
                               echo ${pwd}
                               git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
                               git submodule update --remote
+                              shit
                            '''
                     } 
                 }
