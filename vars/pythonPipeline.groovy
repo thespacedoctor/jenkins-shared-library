@@ -88,11 +88,13 @@ def call(body) {
                     }
                 }
                 steps {
+                    echo "${pwd}"
                     sshagent (credentials: ['jenkins-generated-ssh-key']) {
                         sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
                               git submodule update --remote
                            '''
                     } 
+                    
                     sh  ''' source activate ${BUILD_TAG}-p3
                             cd docs
                             pip install -r requirements.txt
