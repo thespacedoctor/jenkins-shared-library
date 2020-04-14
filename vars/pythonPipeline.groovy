@@ -181,10 +181,12 @@ def call(body) {
                         sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
                               git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
                               git fetch --all
+                              git add . --all
                               git commit -am "adding files generated during build" 
                               git branch -a
                               git checkout develop
                               git merge ${BRANCH_MATCH}
+                              git add . --all
                               git commit -am "Merged ${BRANCH_MATCH} branch to develop" 
                               git push origin develop
                            '''
@@ -203,14 +205,17 @@ def call(body) {
                         sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
                               git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
                               git fetch --all
+                              git add . --all
                               git commit -am "adding files generated during build" || true
                               git branch -a
                               git checkout master
                               git merge ${BRANCH_MATCH}
+                              git add . --all
                               git commit -am "Merged ${BRANCH_MATCH} branch to master" || true
                               git push origin master
                               git checkout develop
                               git merge ${BRANCH_MATCH}
+                              git add . --all
                               git commit -am "Merged ${BRANCH_MATCH} branch to develop" || true
                               git push origin develop
                            '''
