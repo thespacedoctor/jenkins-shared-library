@@ -181,11 +181,11 @@ def call(body) {
                         sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
                               git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
                               git fetch --all
-                              git commit -am "adding files generated during build" || true
+                              git commit -am "adding files generated during build" 
                               git branch -a
                               git checkout develop
                               git merge ${BRANCH_MATCH}
-                              git commit -am "Merged ${BRANCH_MATCH} branch to develop" || true
+                              git commit -am "Merged ${BRANCH_MATCH} branch to develop" 
                               git push origin develop
                            '''
                     }
