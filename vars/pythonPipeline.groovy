@@ -49,17 +49,6 @@ def call(body) {
                         buildBadge.setStatus('running')
                     }
                     checkout scm 
-                    sshagent (credentials: ['jenkins-generated-ssh-key']) {
-                        sh '''echo ${ls}
-                              cd $REPO_NAME
-                              echo ${pwd}
-                              git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
-                              git submodule update --remote
-                           '''
-                    } 
-                    echo '${ls}'
-                    echo '${pwd}'
-                    sh '''shit'''
                 }
             }
 
