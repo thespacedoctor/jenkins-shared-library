@@ -182,12 +182,12 @@ def call(body) {
                               git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
                               git fetch --all
                               git add . --all
-                              git commit -am "adding files generated during build" 
+                              git commit -am "adding files generated during build" || true
                               git branch -a
                               git checkout develop
                               git merge ${BRANCH_MATCH}
                               git add . --all
-                              git commit -am "Merged ${BRANCH_MATCH} branch to develop" 
+                              git commit -am "Merged ${BRANCH_MATCH} branch to develop"  || true
                               git push origin develop
                            '''
                     }
