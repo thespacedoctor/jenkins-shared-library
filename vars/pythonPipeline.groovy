@@ -91,6 +91,7 @@ def call(body) {
                     sh  ''' source activate ${BUILD_TAG}-p3
                             cd docs
                             pip install -r requirements.txt
+                            make buildapi
                             make html
                         '''
                 }
