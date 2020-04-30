@@ -78,7 +78,11 @@ def call(body) {
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                           python setup.py install
                         '''
-                    echo { '${which sphinx-apidoc}' }
+                    result = sh (
+                        script: 'which sphinx-apidoc',
+                        returnStdout: true
+                    ).trim()
+                    echo "sphinx-apidoc path: ${result}"
                 }
 
             }
