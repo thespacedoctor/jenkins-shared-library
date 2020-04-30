@@ -78,8 +78,9 @@ def call(body) {
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                           python setup.py install
                         '''
+                    echo { '${which sphinx-apidoc}' }
                 }
-                echo { '${which sphinx-apidoc}' }
+
             }
         
             stage('Build Docs in Python 3') {
