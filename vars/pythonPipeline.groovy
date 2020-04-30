@@ -71,9 +71,10 @@ def call(body) {
 
             stage('Build conda python 3.7 environment & install code') {
                 steps {
-                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx make sphinxcontrib-apidoc
+                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
+                          conda install -c conda-forge sphinxcontrib-apidoc
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                           python setup.py install
@@ -91,7 +92,7 @@ def call(body) {
                     }
                 }
                 steps {
-                    // echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-build', returnStdout: true).trim()
+                    echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-apidoc', returnStdout: true).trim()
                     sh  ''' source activate ${BUILD_TAG}-p3
                             cd docs
                             pip install -r requirements.txt
