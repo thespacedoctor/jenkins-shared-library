@@ -71,7 +71,7 @@ def call(body) {
 
             stage('Build conda python 3.7 environment & install code') {
                 steps {
-                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx make
+                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx make sphinxcontrib-apidoc
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
@@ -91,7 +91,7 @@ def call(body) {
                     }
                 }
                 steps {
-                    echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-build', returnStdout: true).trim()
+                    // echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-build', returnStdout: true).trim()
                     sh  ''' source activate ${BUILD_TAG}-p3
                             cd docs
                             pip install -r requirements.txt
