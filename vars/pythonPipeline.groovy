@@ -73,7 +73,7 @@ def call(body) {
                 steps {
                     sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx
                           source activate ${BUILD_TAG}-p3 
-                          conda install pytest coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
+                          conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                           python setup.py install
