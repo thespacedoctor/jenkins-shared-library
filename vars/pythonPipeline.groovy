@@ -79,7 +79,7 @@ def call(body) {
                           python setup.py install
                         '''
                     echo sh(script: 'ls -al', returnStdout: true).trim()
-                    echo sh(script: 'which sphinx-build', returnStdout: true).trim()
+                    echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-apidoc', returnStdout: true).trim()
                 }
 
             }
