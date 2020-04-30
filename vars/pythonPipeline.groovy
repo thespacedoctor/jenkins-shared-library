@@ -78,8 +78,8 @@ def call(body) {
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                           python setup.py install
                         '''
-                    echo sh(script: 'ls -al', returnStdout: true).trim()
-                    echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-apidoc', returnStdout: true).trim()
+                    // echo sh(script: 'ls -al', returnStdout: true).trim()
+                    // echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-apidoc', returnStdout: true).trim()
                 }
 
             }
@@ -91,11 +91,13 @@ def call(body) {
                     }
                 }
                 steps {
+                    echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-apidoc', returnStdout: true).trim()
                     sh  ''' source activate ${BUILD_TAG}-p3
                             cd docs
                             pip install -r requirements.txt
-                            make buildapi
+                            source activate ${BUILD_TAG}-p3
                             make html
+                            make buildapi
                         '''
                 }
             }
