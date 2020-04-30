@@ -97,7 +97,7 @@ def call(body) {
                             cd docs
                             pip install -r requirements.txt
                             source activate ${BUILD_TAG}-p3
-                            make buildapi
+                            SPHINX_APIDOC_OPTIONS='members,undoc-members,show-inheritance,inherited-members,member-order' sphinx-apidoc -fMeTP  -o source/_api ../ ../setup.py ../fundamentals/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
                             make html
                         '''
                 }
