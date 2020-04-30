@@ -79,6 +79,7 @@ def call(body) {
                           python setup.py install
                         '''
                 }
+                echo { '${which sphinx-apidoc}' }
             }
         
             stage('Build Docs in Python 3') {
