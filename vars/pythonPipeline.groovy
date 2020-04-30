@@ -91,13 +91,13 @@ def call(body) {
                     }
                 }
                 steps {
-                    echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-apidoc', returnStdout: true).trim()
+                    echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-build', returnStdout: true).trim()
                     sh  ''' source activate ${BUILD_TAG}-p3
                             cd docs
                             pip install -r requirements.txt
                             source activate ${BUILD_TAG}-p3
-                            make html
                             make buildapi
+                            make html
                         '''
                 }
             }
