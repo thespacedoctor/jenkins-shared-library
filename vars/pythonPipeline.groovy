@@ -71,7 +71,7 @@ def call(body) {
 
             stage('Build conda python 3.7 environment & install code') {
                 steps {
-                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx
+                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx make
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
