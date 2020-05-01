@@ -71,12 +71,12 @@ def call(body) {
 
             stage('Build conda python 3.7 environment & install code') {
                 steps {
-                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx pylint  pycodestyle toml
+                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx  pycodestyle
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
                           conda install -c conda-forge sphinxcontrib-apidoc
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
-                          pip install coverage-badge ${EXTRA_PIP_PACKAGES}
+                          pip install coverage-badge ${EXTRA_PIP_PACKAGES} pylint
                           python setup.py install
                         '''
                     // echo sh(script: 'ls -al', returnStdout: true).trim()
