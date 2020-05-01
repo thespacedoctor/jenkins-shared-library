@@ -71,7 +71,7 @@ def call(body) {
 
             stage('Build conda python 3.7 environment & install code') {
                 steps {
-                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx
+                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx pylint  pycodestyle
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
                           conda install -c conda-forge sphinxcontrib-apidoc
@@ -97,7 +97,6 @@ def call(body) {
                             cd docs
                             pip install -r requirements.txt
                             source activate ${BUILD_TAG}-p3
-                            SPHINX_APIDOC_OPTIONS='members,undoc-members,show-inheritance,inherited-members,member-order' sphinx-apidoc -fMeTP  -o source/_api ../ ../setup.py ../fundamentals/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
                             make html
                         '''
                 }
@@ -123,7 +122,7 @@ def call(body) {
                 }
                 post {
                     always {
-                        // Archive unit tests for the future
+                        // Archive unit tests for the future.
                         junit allowEmptyResults: true, testResults: 'test-reports/unit_tests_p2.xml'
                     }
                 }
@@ -136,8 +135,6 @@ def call(body) {
                             sh  ''' source activate ${BUILD_TAG}-p3
                                     pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml 
                                     coverage-badge -f -o coverage.svg
-                                    which head
-                                    which grep
                                     head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" > reports/coverage.txt
                                 '''
                         } catch (Exception err) {
@@ -152,6 +149,32 @@ def call(body) {
                     }
                 }
             }
+
+            stage('Run Linting on Python 3') {
+              steps {
+                    sh  ''' source activate ${BUILD_TAG}-p3
+                            cd docs
+                            pylint ${REPO_NAME} > reports/pylint.report
+                            pycodestyle ${REPO_NAME} > reports/pep8.report
+                        '''
+                }
+              post {
+                  always{
+                      // Generate JUnit, PEP8, Pylint and Coverage reports.
+                      junit 'reports/*junit.xml'
+                      recordIssues(
+                          tool: pep8(pattern: 'reports/pep8.report'),
+                          unstableTotalAll: 200,
+                          failedTotalAll: 220
+                      )
+                      recordIssues(
+                          tool: pyLint(pattern: 'reports/pylint.report'),
+                          unstableTotalAll: 20,
+                          failedTotalAll: 30
+                      )
+                  }
+              }
+          }
             
 
             stage('Convert Coverage Reports for Jenkins') {
