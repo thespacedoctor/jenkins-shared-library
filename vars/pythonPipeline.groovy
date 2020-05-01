@@ -154,6 +154,7 @@ def call(body) {
             stage('Run Linting on Python 3') {
               steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
+                            pwd
                             pylint ${REPO_NAME} > reports/pylint.report
                             pycodestyle ${REPO_NAME} > reports/pep8.report
                         '''
