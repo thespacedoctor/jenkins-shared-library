@@ -71,12 +71,12 @@ def call(body) {
 
             stage('Build conda python 3.7 environment & install code') {
                 steps {
-                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx  pycodestyle
+                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx 
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
                           conda install -c conda-forge sphinxcontrib-apidoc
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
-                          pip install coverage-badge ${EXTRA_PIP_PACKAGES} pylint
+                          pip install coverage-badge ${EXTRA_PIP_PACKAGES} 
                           python setup.py install
                         '''
                     // echo sh(script: 'ls -al', returnStdout: true).trim()
@@ -150,34 +150,6 @@ def call(body) {
                     }
                 }
             }
-
-            stage('Run Linting on Python 3') {
-              steps {
-                    sh  ''' source activate ${BUILD_TAG}-p3
-                            pwd
-                            ls
-                            pycodestyle ${REPO_NAME} > reports/pep8.report
-                            pylint ${REPO_NAME} > reports/pylint.report
-                        '''
-                }
-              post {
-                  always{
-                      // Generate JUnit, PEP8, Pylint and Coverage reports.
-                      junit 'reports/*junit.xml'
-                      recordIssues(
-                          tool: pep8(pattern: 'reports/pep8.report'),
-                          unstableTotalAll: 200,
-                          failedTotalAll: 220
-                      )
-                      recordIssues(
-                          tool: pyLint(pattern: 'reports/pylint.report'),
-                          unstableTotalAll: 20,
-                          failedTotalAll: 30
-                      )
-                  }
-              }
-          }
-            
 
             stage('Convert Coverage Reports for Jenkins') {
                 steps {
