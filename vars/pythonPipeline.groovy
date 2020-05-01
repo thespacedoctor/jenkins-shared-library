@@ -155,8 +155,9 @@ def call(body) {
               steps {
                     sh  ''' source activate ${BUILD_TAG}-p3
                             pwd
-                            pylint ${REPO_NAME} > reports/pylint.report
+                            ls
                             pycodestyle ${REPO_NAME} > reports/pep8.report
+                            pylint ${REPO_NAME} > reports/pylint.report
                         '''
                 }
               post {
