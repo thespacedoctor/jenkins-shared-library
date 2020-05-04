@@ -39,6 +39,8 @@ def call(body) {
           BUILD_URL=buildUrl()
           COVERAGE_URL=coverageReportUrl()
           BRANCH_MATCH=branchName2()
+          RTD_URL=rtdUrl()
+          PYPI_URL=pypiUrl()
         }
 
         stages {
@@ -279,6 +281,14 @@ String buildUrl() {
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
     return "${env.JENKINS_URL}/blue/organizations/jenkins/${rn}/detail/${bn}/${env.BUILD_NUMBER}/pipeline"
 }
+String rtdUrl() {
+    rn = repoName()
+    return "https://readthedocs.org/projects/${rn}/"
+}
+String pypiUrl() {
+    rn = repoName()
+    return "https://pypi.org/project/${rn}"
+}
 String coverageReportUrl() {
     rn = repoName()
     bn = "${env.BRANCH_NAME}".replaceAll("/","%2F")
@@ -304,7 +314,7 @@ def slackMessage(status) {
         def crStr = readFile('reports/coverage.txt').trim()
         int cr = Math.floor(Double.valueOf(crStr)*100.0);
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-passing-success.png"
-        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*\nREADTHEDOCS: *<${env.RTD_URL}|${env.REPO_NAME}>*\nPYPI: *<${env.PYPI_URL}|${env.REPO_NAME}>*"
     }
 
     blocks = [
