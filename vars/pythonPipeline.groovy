@@ -219,6 +219,7 @@ def call(body) {
                               git add . --all
                               git commit -am "Merged ${BRANCH_MATCH} branch to master" || true
                               git push origin master
+                              sleep 60
                               git checkout develop
                               git merge ${BRANCH_MATCH}
                               git add . --all
