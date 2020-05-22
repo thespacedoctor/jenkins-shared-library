@@ -284,7 +284,7 @@ String buildUrl() {
 }
 String rtdUrl() {
     rn = repoName()
-    return "https://readthedocs.org/projects/${rn}/"
+    return "https://${rn}.readthedocs.io/en/master/"
 }
 String pypiUrl() {
     rn = repoName()
