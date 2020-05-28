@@ -60,9 +60,9 @@ def call(body) {
                         sh '''
                               mkdir -p ~/git_repos/_misc_
                               cd ~/git_repos/_misc_
-                              git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
                               git clone git@github.com:thespacedoctor/settings.git || true
                               cd settings
+                              git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
                               git fetch --all
                               git add . --all
                               git commit -am "adding new files from jenkins machine" || true
