@@ -54,6 +54,25 @@ def call(body) {
                 }
             }
 
+            stage('Clone/Update Settings Files') {
+                steps {
+                    sshagent (credentials: ['jenkins-generated-ssh-key']) {
+                        sh '''
+                              mkdir -p ~/git_repos/_misc_
+                              cd ~/git_repos/_misc_
+                              git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
+                              git clone git@github.com:thespacedoctor/settings.git || true
+                              cd settings
+                              git fetch --all
+                              git add . --all
+                              git commit -am "adding new files from jenkins machine" || true
+                              git push origin master
+                           '''
+                    }
+                }
+
+            }
+
             stage('Build conda python 2.7 environment & install code') {
                 when {
                     expression {
