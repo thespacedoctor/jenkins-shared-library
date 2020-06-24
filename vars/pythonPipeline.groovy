@@ -66,6 +66,7 @@ def call(body) {
                               git fetch --all
                               git add . --all
                               git commit -am "adding new files from jenkins machine" || true
+                              git pull
                               git push origin master
                            '''
                     }
