@@ -5,4 +5,4 @@
 **resources:** non-groovy files
 
 
-[Pipeline Syntax](http://167.99.90.204:8080/pipeline-syntax/)
+[Pipeline Syntax](http://167.71.135.11:8080/pipeline-syntax/)

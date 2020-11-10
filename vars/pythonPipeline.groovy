@@ -24,6 +24,10 @@ def call(body) {
         //     pollSCM('*/5 * * * 1-5')
         // }
 
+        triggers {
+            cron('H H * * *')
+        }
+
         options {
             // skipDefaultCheckout(true)
             // KEEP THE 10 MOST RECENT BUILDS
