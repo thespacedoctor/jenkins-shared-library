@@ -25,7 +25,7 @@ def call(body) {
         // }
 
         triggers {
-            cron('H H * * *')
+            cron((env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master') ? 'H H * * *' : '')
         }
 
         options {
