@@ -29,9 +29,9 @@ def call(body) {
         }
 
         options {
-            skipDefaultCheckout(true)
+            skipDefaultCheckout()
             // KEEP THE 10 MOST RECENT BUILDS
-            // buildDiscarder(logRotator(numToKeepStr: '10'))
+            buildDiscarder(logRotator(numToKeepStr: '2'))
             timestamps()
         }
         // SOURCE ANACONDA
@@ -54,6 +54,7 @@ def call(body) {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
                     }
+                    cleanWs()
                     checkout scm 
                 }
             }
