@@ -50,11 +50,11 @@ def call(body) {
         stages {
             stage ("Code pull") {
                 steps{
+                    cleanWs()
                     script {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
                     }
-                    cleanWs()
                     checkout scm 
                 }
             }
