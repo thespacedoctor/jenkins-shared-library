@@ -215,6 +215,7 @@ def call(body) {
                               git add . --all
                               git commit -am "adding files generated during build" || true
                               git branch -a
+                              git checkout ${BRANCH_MATCH}
                               git checkout develop
                               git merge ${BRANCH_MATCH}
                               git add . --all
@@ -239,6 +240,7 @@ def call(body) {
                               git add . --all
                               git commit -am "adding files generated during build" || true
                               git branch -a
+                              git checkout ${BRANCH_MATCH}
                               git checkout master
                               git merge ${BRANCH_MATCH}
                               git add . --all
