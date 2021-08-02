@@ -217,7 +217,7 @@ def call(body) {
                               git branch -a
                               git checkout ${BRANCH_MATCH}
                               git checkout develop
-                              git merge ${BRANCH_MATCH}
+                              git merge -Xours ${BRANCH_MATCH}
                               git add . --all
                               git commit -am "Merged ${BRANCH_MATCH} branch to develop"  || true
                               git push origin develop
@@ -242,13 +242,13 @@ def call(body) {
                               git branch -a
                               git checkout ${BRANCH_MATCH}
                               git checkout master
-                              git merge ${BRANCH_MATCH}
+                              git merge -Xtheirs ${BRANCH_MATCH}
                               git add . --all
                               git commit -am "Merged ${BRANCH_MATCH} branch to master" || true
                               git push origin master
                               sleep 60
                               git checkout develop
-                              git merge ${BRANCH_MATCH}
+                              git merge -Xtheirs ${BRANCH_MATCH}
                               git add . --all
                               git commit -am "Merged ${BRANCH_MATCH} branch to develop" || true
                               git push origin develop
