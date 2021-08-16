@@ -267,8 +267,8 @@ def call(body) {
                     sshagent (credentials: ['jenkins-generated-ssh-key']) {
                         sh '''source activate ${BUILD_TAG}-p3
                               python setup.py sdist
-                              python setup.py bdist_wheel
-                              twine upload --skip-existing dist/*.tar.gz  || true
+                              # python setup.py bdist_wheel
+                              twine upload --skip-existing dist/*  || true
                            '''
                     }
                 }
