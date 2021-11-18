@@ -410,7 +410,7 @@ def getCommitSha() {
 
 def updateGithubCommitStatus(build, String context, String buildUrl, String message, String state) {
   // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
-  commitSha = getCommitSha()
+  // commitSha = getCommitSha()
   println "Updating Github Commit Status"
   println "repoUrl $repoUrl"
   println "commitSha $commitSha"
@@ -419,7 +419,7 @@ def updateGithubCommitStatus(build, String context, String buildUrl, String mess
   step([
     $class: 'GitHubCommitStatusSetter',
     reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.BRANCH_NAME],
-    commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
+    commitShaSource: [$class: "ManuallyEnteredShaSource", sha: env.GIT_COMMIT],
     errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
     contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
     statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: buildUrl],
