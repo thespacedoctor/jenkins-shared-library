@@ -52,7 +52,6 @@ def call(body) {
         stages {
             stage ("Code pull") {
                 steps{
-                    println "${env.BRANCH_NAME}"
                     cleanWs()
                     script {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
@@ -404,11 +403,6 @@ String buildBadgeUrl() {
     return "${env.JENKINS_URL}/buildStatus/icon?job=${rn}%2F${bn}"
 }
 
-def getRepoURL() {
-  sh "git config --get remote.origin.url > /tmp/remote-url"
-  return readFile("/tmp/remote-url").trim()
-}
-
 def getCommitSha() {
   sh "git rev-parse HEAD > /tmp/current-commit"
   return readFile("/tmp/current-commit").trim()
@@ -425,7 +419,7 @@ def updateGithubCommitStatus(build, String context, String buildUrl, String mess
 
   step([
     $class: 'GitHubCommitStatusSetter',
-    reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
+    reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.BRANCH_NAME],
     commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
     errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
     contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
