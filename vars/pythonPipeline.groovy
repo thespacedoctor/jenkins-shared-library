@@ -412,8 +412,8 @@ def updateGithubCommitStatus(build, String context, String buildUrl, String mess
   // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
   // commitSha = getCommitSha()
   println "Updating Github Commit Status"
-  println "repoUrl $repoUrl"
-  println "commitSha $commitSha"
+  println "repoUrl ${env.BRANCH_NAME}"
+  println "commitSha ${env.GIT_COMMIT}"
   println "build result: ${build.result}, currentResult: ${build.currentResult}"
 
   step([
