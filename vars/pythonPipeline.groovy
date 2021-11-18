@@ -55,7 +55,6 @@ def call(body) {
                     cleanWs()
                     script {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
-                        updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
                         buildBadge.setStatus('running')
                     }
                     checkout scm 
@@ -90,6 +89,7 @@ def call(body) {
                     }
                 }
                 steps {
+                    updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
                     sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip 
                                   source activate ${BUILD_TAG}-p2
                                   conda install pytest pandas coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
@@ -102,6 +102,7 @@ def call(body) {
 
             stage('Build conda python 3.7 environment & install code') {
                 steps {
+                    updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
                     sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx 
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
