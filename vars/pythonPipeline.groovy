@@ -55,7 +55,7 @@ def call(body) {
                     cleanWs()
                     script {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
-                        updateGithubCommitStatus(currentBuild, "continuous-integration/jenkinsSolo2", BUILD_URL, "In Progress", "PENDING")
+                        updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
                         buildBadge.setStatus('running')
                     }
                     checkout scm 
@@ -83,7 +83,7 @@ def call(body) {
             }
 
             stage('Build conda python 2.7 environment & install code') {
-                updateGithubCommitStatus(currentBuild, "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
+                
                 when {
                     expression {
                         PYTHON2 == '' || PYTHON2 == true || PYTHON2 == 'true'
@@ -312,12 +312,15 @@ def call(body) {
             }
             failure {
                 slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build failed".toLowerCase(), blocks: slackMessage("Failed"))
+                updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Failed.", 'FAILURE')
             }
             success {
                 slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build successful".toLowerCase(), blocks: slackMessage("Finished Successfully"))
+                updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Success!", 'SUCCESS')
             }
             unstable {
                 slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build unstable".toLowerCase(), blocks: slackMessage("Unstable"))
+                updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Unstable.", 'UNSTABLE')
             }
         }
     }
