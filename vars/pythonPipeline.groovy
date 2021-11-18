@@ -58,7 +58,7 @@ def call(body) {
                         buildBadge.setStatus('running')
                         def scmVars = checkout scm 
 
-                        env.REPO_NAME = scmVars.GIT_COMMIT
+                        env.GIT_COMMIT = scmVars.GIT_COMMIT
                     }
                     
                 }
