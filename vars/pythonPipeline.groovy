@@ -404,12 +404,12 @@ String buildBadgeUrl() {
 }
 
 def getRepoURL() {
-  sh "git config --get remote.origin.url > .git/remote-url"
+  sh "git config --get remote.origin.url > /tmp/remote-url"
   return readFile(".git/remote-url").trim()
 }
 
 def getCommitSha() {
-  sh "git rev-parse HEAD > .git/current-commit"
+  sh "git rev-parse HEAD > /tmp/current-commit"
   return readFile(".git/current-commit").trim()
 }
 
