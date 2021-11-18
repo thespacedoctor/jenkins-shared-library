@@ -410,7 +410,6 @@ def getCommitSha() {
 
 def updateGithubCommitStatus(build, String context, String buildUrl, String message, String state) {
   // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
-  repoUrl = getRepoURL()
   commitSha = getCommitSha()
   println "Updating Github Commit Status"
   println "repoUrl $repoUrl"
