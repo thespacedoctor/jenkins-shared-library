@@ -7,6 +7,8 @@
 
 import java.lang.Math;
 
+
+
 def call(body) {
     // EVALUATE THE BODY BLOCK, AND COLLECT CONFIGURATION INTO THE OBJECT
     def pipelineParams= [:]
@@ -53,6 +55,7 @@ def call(body) {
                     cleanWs()
                     script {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
+                        updateGithubCommitStatus(currentBuild, "continuous-integration/jenkinsSolo2", BUILD_URL, "In Progress", "PENDING")
                         buildBadge.setStatus('running')
                     }
                     checkout scm 
@@ -80,6 +83,7 @@ def call(body) {
             }
 
             stage('Build conda python 2.7 environment & install code') {
+                updateGithubCommitStatus(currentBuild, "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
                 when {
                     expression {
                         PYTHON2 == '' || PYTHON2 == true || PYTHON2 == 'true'
@@ -198,6 +202,31 @@ def call(body) {
                                        sourceEncoding: 'ASCII',
                                        zoomCoverageChart: false])
                         }
+                }
+            }
+
+            stage('Merge Hotfix/Feature to Development Branch') {
+                when {
+                    expression {
+                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /feature.*/ || BRANCH_MATCH ==~ /hotfix.*/)
+                    }
+                }
+                steps {
+                    sshagent (credentials: ['jenkins-generated-ssh-key']) {
+                        sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
+                              git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+                              git fetch --all
+                              git add . --all
+                              git commit -am "adding files generated during build" || true
+                              git branch -a
+                              git checkout ${BRANCH_MATCH}
+                              git checkout develop
+                              git merge -Xours ${BRANCH_MATCH}
+                              git add . --all
+                              git commit -am "Merged ${BRANCH_MATCH} branch to develop"  || true
+                              git push origin develop
+                           '''
+                    }
                 }
             }
 
@@ -371,4 +400,107 @@ String buildBadgeUrl() {
     return "${env.JENKINS_URL}/buildStatus/icon?job=${rn}%2F${bn}"
 }
 
+def getRepoURL() {
+  sh "git config --get remote.origin.url > .git/remote-url"
+  return readFile(".git/remote-url").trim()
+}
+
+def getCommitSha() {
+  sh "git rev-parse HEAD > .git/current-commit"
+  return readFile(".git/current-commit").trim()
+}
+
+def getRepoURL() {
+  sh "mkdir -p .git"
+  sh "git config --get remote.origin.url > .git/remote-url"
+  return readFile(".git/remote-url").trim()
+}
+def getCommitSha() {
+  sh "mkdir -p .git"
+  sh "git rev-parse HEAD > .git/current-commit"
+  return readFile(".git/current-commit").trim()
+}
+
+def updateGithubCommitStatus(build, String context, String buildUrl, String message, String state) {
+  // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
+  repoUrl = getRepoURL()
+  commitSha = getCommitSha()
+  println "Updating Github Commit Status"
+  println "repoUrl $repoUrl"
+  println "commitSha $commitSha"
+  println "build result: ${build.result}, currentResult: ${build.currentResult}"
+
+  step([
+    $class: 'GitHubCommitStatusSetter',
+    reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
+    commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
+    errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+    contextSource: [$class: "ManuallyEnteredCommitContextSource", context: context],
+    statusBackrefSource: [$class: "ManuallyEnteredBackrefSource", backref: buildUrl],
+
+    statusResultSource: [
+      $class: 'ConditionalStatusResultSource',
+      results: [
+        [$class: 'AnyBuildResult', state: state, message: message]
+      ]
+    ]
+  ])
+}
+
+// def functionalTestBatchReportDirectory="target/functionalTestBatchReportDirectory"
+
+// pipeline {
+//   agent any
+//   options {
+//     disableConcurrentBuilds()
+//   }
+//   stages {
+//     stage('Test Execute') {
+//       steps {
+
+//         updateGithubCommitStatus(currentBuild, "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
+//         dir(path: 'ModelCatalogueCorePluginTestApp') {
+//             // updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Installing Node Modules", "PENDING")
+//             // sh 'npm install'
+//             // updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Installing Bower Components", "PENDING")
+//             // sh 'bower install'
+//             updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Running Functional Tests", "PENDING")
+//             sh 'echo $PWD'
+//             sh "mkdir -p ${functionalTestBatchReportDirectory}"
+//             wrap([$class: 'Xvfb']) {
+//               sh "./scripts/testing/runFunctionalTestBatches.sh -testReportDir=${functionalTestBatchReportDirectory} -grailsCommand=/opt/grails/bin/grails -Dserver.port=8081 -Dgeb.env=chrome -DdownloadFilepath=/home/ubuntu/download -Dwebdriver.chrome.driver=/opt/chromedriver"
+//             }
+//             script {
+//                 ALLFAILED = sh (script: "cat ${functionalTestBatchReportDirectory}/allFailed.html", returnStdout: true)
+//                 echo "ALLFAILED: ${ALLFAILED}"
+//                 if (ALLFAILED.contains("Failed Tests")) {
+//                     error("Some tests failed")
+//                 }
+//             }
+
+//         }
+//       }
+//       post {
+//         always {
+//             publishHTML(target: [allowMissing: true,
+//                     alwaysLinkToLastBuild: true,
+//                     keepAll: true,
+//                     reportDir: "ModelCatalogueCorePluginTestApp/${functionalTestBatchReportDirectory}",
+//                     reportFiles: 'allFailed.html',
+//                     reportName: 'HTML Report',
+//                     reportTitles: ''])
+//         }
+//         failure {
+            
+//         }
+//         success {
+//             updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Success!", 'SUCCESS')
+//         }
+//         unstable {
+//             updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Unstable.", 'UNSTABLE')
+//         }
+//       }
+//     }
+//   }
+// }
 
