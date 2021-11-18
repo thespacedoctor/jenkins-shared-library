@@ -413,17 +413,6 @@ def getCommitSha() {
   return readFile(".git/current-commit").trim()
 }
 
-def getRepoURL() {
-  sh "mkdir -p .git"
-  sh "git config --get remote.origin.url > .git/remote-url"
-  return readFile(".git/remote-url").trim()
-}
-def getCommitSha() {
-  sh "mkdir -p .git"
-  sh "git rev-parse HEAD > .git/current-commit"
-  return readFile(".git/current-commit").trim()
-}
-
 def updateGithubCommitStatus(build, String context, String buildUrl, String message, String state) {
   // workaround https://issues.jenkins-ci.org/browse/JENKINS-38674
   repoUrl = getRepoURL()
