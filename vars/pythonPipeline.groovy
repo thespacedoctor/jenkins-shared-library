@@ -16,7 +16,7 @@ def call(body) {
     body.delegate = pipelineParams
     body()
     def buildBadge = addEmbeddableBadgeConfiguration()
-    def commitHash = ""
+
     pipeline {
 
         agent any
@@ -56,17 +56,19 @@ def call(body) {
                     script {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
+                        def scmVars = checkout scm 
+
+                        // Display the variable using scmVars
+                        echo "scmVars.GIT_COMMIT"
+                        echo "${scmVars.GIT_COMMIT}"
                     }
-                    withCheckout(scm) {
-                         echo "GIT_COMMIT is ${env.GIT_COMMIT}"
-                    }
-                    // commitHash=checkout(scm).GIT_COMMIT
-                    // println "hash = ${commitHash}"
+                    
                 }
             }
 
             stage('Clone/Update Settings Files') {
                 steps {
+
                     sshagent (credentials: ['jenkins-generated-ssh-key']) {
                         sh '''
                               mkdir -p ~/git_repos/_misc_
