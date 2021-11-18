@@ -16,7 +16,7 @@ def call(body) {
     body.delegate = pipelineParams
     body()
     def buildBadge = addEmbeddableBadgeConfiguration()
-
+    def commitHash = checkout(scm).GIT_COMMIT
     pipeline {
 
         agent any
@@ -57,7 +57,6 @@ def call(body) {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
                     }
-                    def commitHash = checkout(scm).GIT_COMMIT
                     println "hash = ${commitHash}"
                 }
             }
