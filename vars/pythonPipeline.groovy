@@ -57,8 +57,11 @@ def call(body) {
                         slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build running".toLowerCase(), blocks: slackMessage('running'))
                         buildBadge.setStatus('running')
                     }
-                    commitHash=checkout(scm).GIT_COMMIT
-                    println "hash = ${commitHash}"
+                    withCheckout(scm) {
+                         echo "GIT_COMMIT is ${env.GIT_COMMIT}"
+                    }
+                    // commitHash=checkout(scm).GIT_COMMIT
+                    // println "hash = ${commitHash}"
                 }
             }
 
