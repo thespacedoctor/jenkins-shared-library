@@ -93,7 +93,7 @@ def call(body) {
                     }
                 }
                 steps {
-                    updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
+                    updateGithubCommitStatus(currentBuild,  "jenkins/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
                     sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip 
                                   source activate ${BUILD_TAG}-p2
                                   conda install pytest pandas coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
@@ -106,7 +106,7 @@ def call(body) {
 
             stage('Build conda python 3.7 environment & install code') {
                 steps {
-                    updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
+                    updateGithubCommitStatus(currentBuild,  "jenkins/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
                     sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx 
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
@@ -317,15 +317,15 @@ def call(body) {
             }
             failure {
                 slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build failed".toLowerCase(), blocks: slackMessage("Failed"))
-                updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Failed.", 'FAILURE')
+                updateGithubCommitStatus(currentBuild,  "jenkins/thespacedoctor", BUILD_URL, "Build Failed.", 'FAILURE')
             }
             success {
                 slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build successful".toLowerCase(), blocks: slackMessage("Finished Successfully"))
-                updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Success!", 'SUCCESS')
+                updateGithubCommitStatus(currentBuild,  "jenkins/thespacedoctor", BUILD_URL, "Build Success!", 'SUCCESS')
             }
             unstable {
                 slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} build unstable".toLowerCase(), blocks: slackMessage("Unstable"))
-                updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Unstable.", 'UNSTABLE')
+                updateGithubCommitStatus(currentBuild,  "jenkins/thespacedoctor", BUILD_URL, "Build Unstable.", 'UNSTABLE')
             }
         }
     }
@@ -438,60 +438,5 @@ def updateGithubCommitStatus(build, String context, String buildUrl, String mess
   ])
 }
 
-// def functionalTestBatchReportDirectory="target/functionalTestBatchReportDirectory"
 
-// pipeline {
-//   agent any
-//   options {
-//     disableConcurrentBuilds()
-//   }
-//   stages {
-//     stage('Test Execute') {
-//       steps {
-
-//         updateGithubCommitStatus(currentBuild, "continuous-integration/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
-//         dir(path: 'ModelCatalogueCorePluginTestApp') {
-//             // updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Installing Node Modules", "PENDING")
-//             // sh 'npm install'
-//             // updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Installing Bower Components", "PENDING")
-//             // sh 'bower install'
-//             updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Running Functional Tests", "PENDING")
-//             sh 'echo $PWD'
-//             sh "mkdir -p ${functionalTestBatchReportDirectory}"
-//             wrap([$class: 'Xvfb']) {
-//               sh "./scripts/testing/runFunctionalTestBatches.sh -testReportDir=${functionalTestBatchReportDirectory} -grailsCommand=/opt/grails/bin/grails -Dserver.port=8081 -Dgeb.env=chrome -DdownloadFilepath=/home/ubuntu/download -Dwebdriver.chrome.driver=/opt/chromedriver"
-//             }
-//             script {
-//                 ALLFAILED = sh (script: "cat ${functionalTestBatchReportDirectory}/allFailed.html", returnStdout: true)
-//                 echo "ALLFAILED: ${ALLFAILED}"
-//                 if (ALLFAILED.contains("Failed Tests")) {
-//                     error("Some tests failed")
-//                 }
-//             }
-
-//         }
-//       }
-//       post {
-//         always {
-//             publishHTML(target: [allowMissing: true,
-//                     alwaysLinkToLastBuild: true,
-//                     keepAll: true,
-//                     reportDir: "ModelCatalogueCorePluginTestApp/${functionalTestBatchReportDirectory}",
-//                     reportFiles: 'allFailed.html',
-//                     reportName: 'HTML Report',
-//                     reportTitles: ''])
-//         }
-//         failure {
-            
-//         }
-//         success {
-//             updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Success!", 'SUCCESS')
-//         }
-//         unstable {
-//             updateGithubCommitStatus(currentBuild,  "continuous-integration/thespacedoctor", BUILD_URL, "Build Unstable.", 'UNSTABLE')
-//         }
-//       }
-//     }
-//   }
-// }
 
