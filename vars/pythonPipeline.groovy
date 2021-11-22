@@ -211,31 +211,6 @@ def call(body) {
                 }
             }
 
-            stage('Merge Hotfix/Feature to Development Branch') {
-                when {
-                    expression {
-                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /feature.*/ || BRANCH_MATCH ==~ /hotfix.*/)
-                    }
-                }
-                steps {
-                    sshagent (credentials: ['jenkins-generated-ssh-key']) {
-                        sh '''git config core.sshCommand "ssh -v -o StrictHostKeyChecking=no"
-                              git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
-                              git fetch --all
-                              git add . --all
-                              git commit -am "adding files generated during build" || true
-                              git branch -a
-                              git checkout ${BRANCH_MATCH}
-                              git checkout develop
-                              git merge -Xours ${BRANCH_MATCH}
-                              git add . --all
-                              git commit -am "Merged ${BRANCH_MATCH} branch to develop"  || true
-                              git push origin develop
-                           '''
-                    }
-                }
-            }
-
             // stage('Merge Hotfix/Feature to Development Branch') {
             //     when {
             //         expression {
@@ -260,6 +235,7 @@ def call(body) {
             //         }
             //     }
             // }
+
 
             stage('Merge Release to Development & Master Branches') {
                 when {
