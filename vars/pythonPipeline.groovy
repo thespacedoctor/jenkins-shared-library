@@ -334,7 +334,7 @@ String rtdUrl() {
 
 String githubUrl() {
     rn = repoName()
-    return "https://github.com/thespacedoctor/${rn}/tree/${env.BRANCH_NAME}"
+    return "https://github.com/thespacedoctor/${rn}/tree/${env.BRANCH_NAME}".replaceAll("/tree/PR-","/pull/PR-")
 }
 
 String githubPullRequestToDev() {
@@ -365,18 +365,18 @@ def slackMessage(status) {
     badge = buildBadgeUrl()
     if(status == "Failed") {
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-failed-red.png"
-        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_NAME}>*"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*"
     } else if(status == "Unstable") {
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-unstable-orange.png"
-        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_NAME}>*"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*"
     } else if(status == "running") {
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-running-blueviolet.png"
-        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_NAME}>*"  
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*"  
     } else {
         def crStr = readFile('reports/coverage.txt').trim()
         int cr = Math.floor(Double.valueOf(crStr)*100.0);
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-passing-success.png"
-        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*\nREADTHEDOCS: *<${env.RTD_URL}|${env.REPO_NAME}>*\nPYPI: *<${env.PYPI_URL}|${env.REPO_NAME}>*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_NAME}>*\nPR - DEV: *<${env.PULLREQUEST_DEV}|${env.REPO_NAME}>*\nPR - MAIN: *<${env.PULLREQUEST_MAIN}|${env.REPO_NAME}>*"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*\nREADTHEDOCS: *<${env.RTD_URL}|${env.REPO_NAME}>*\nPYPI: *<${env.PYPI_URL}|${env.REPO_NAME}>*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*\nPR - DEV: *<${env.PULLREQUEST_DEV}|${env.REPO_NAME}>*\nPR - MAIN: *<${env.PULLREQUEST_MAIN}|${env.REPO_NAME}>*"
     }
 
     blocks = [
