@@ -59,6 +59,7 @@ def call(body) {
                         def scmVars = checkout scm 
 
                         env.GIT_COMMIT = scmVars.GIT_COMMIT
+                        println scmVars
                     }
                     
                 }
