@@ -103,7 +103,7 @@ def call(body) {
                                   conda install pytest pandas coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
                                   ${EXTRA_CONDA_INSTALL_COMMANDS}
                                   pip install coverage-badge ${EXTRA_PIP_PACKAGES}
-                                  python setup.py develop
+                                  pip install -e .
                                 '''
                 }
             }
@@ -117,7 +117,7 @@ def call(body) {
                           conda install -c conda-forge sphinxcontrib-apidoc
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES} 
-                          python setup.py develop
+                          pip install -e .
                         '''
                     // echo sh(script: 'ls -al', returnStdout: true).trim()
                     // echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-apidoc', returnStdout: true).trim()
