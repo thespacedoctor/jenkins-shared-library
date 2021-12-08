@@ -65,9 +65,9 @@ def call(body) {
                 }
                 steps {
                     script {
-                        slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH}".toLowerCase(), blocks: slackMessage('success'))
+                        slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH}".toLowerCase(), blocks: slackMessage('pull-request'))
                         currentBuild.result = 'ABORTED'
-                        error("Aborting the build.")   
+                        error("Aborting the build - submit a pull request to test")   
                     }
                 }
             }
@@ -392,11 +392,14 @@ def slackMessage(status) {
     } else if(status == "running") {
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-running-blueviolet.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*"  
+    } else if(status == "pull-request") {
+        badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/pull-request.png"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*\nPull Request - DEV: *<${env.PULLREQUEST_DEV}|${env.REPO_NAME}>*\nPull Request - MAIN: *<${env.PULLREQUEST_MAIN}|${env.REPO_NAME}>*"
     } else {
         def crStr = readFile('reports/coverage.txt').trim()
         int cr = Math.floor(Double.valueOf(crStr)*100.0);
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-passing-success.png"
-        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*\nREADTHEDOCS: *<${env.RTD_URL}|${env.REPO_NAME}>*\nPYPI: *<${env.PYPI_URL}|${env.REPO_NAME}>*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*\nPR - DEV: *<${env.PULLREQUEST_DEV}|${env.REPO_NAME}>*\nPR - MAIN: *<${env.PULLREQUEST_MAIN}|${env.REPO_NAME}>*"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*\nREADTHEDOCS: *<${env.RTD_URL}|${env.REPO_NAME}>*\nPYPI: *<${env.PYPI_URL}|${env.REPO_NAME}>*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*"
     }
 
     blocks = [
