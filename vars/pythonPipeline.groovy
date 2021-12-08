@@ -85,9 +85,9 @@ def call(body) {
                         println scmVars
 
                         // Determine actual PR commit, if necessary
-                        sh 'git rev-parse HEAD | git log --pretty=%P -n 1 --date-order > tmp/MERGE_COMMIT_PARENTS'
+                        sh 'git rev-parse HEAD | git log --pretty=%P -n 1 --date-order > /tmp/MERGE_COMMIT_PARENTS'
                         sh 'cat tmp/MERGE_COMMIT_PARENTS'
-                        merge_commit_parents = readFile('tmp/MERGE_COMMIT_PARENTS').trim()
+                        merge_commit_parents = readFile('/tmp/MERGE_COMMIT_PARENTS').trim()
                         if (merge_commit_parents.length() > 40) {
                             echo 'More than one merge commit parent signifies that the merge commit is not the PR commit'
                             echo "Changing git_commit from '${env.GIT_COMMIT}' to '${merge_commit_parents.take(40)}'"
