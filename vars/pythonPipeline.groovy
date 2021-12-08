@@ -63,9 +63,11 @@ def call(body) {
                         (BRANCH_MATCH ==~ /feature.*/ || BRANCH_MATCH ==~ /hotfix.*/)
                     }
                 }
-                steps{
-                    currentBuild.result = 'ABORTED'
-                    error("Aborting the build.")   
+                steps {
+                    script {
+                        currentBuild.result = 'ABORTED'
+                        error("Aborting the build.")   
+                    }
                 }
             }
 
