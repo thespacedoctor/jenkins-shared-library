@@ -65,9 +65,10 @@ def call(body) {
                 }
                 steps {
                     script {
-                        slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH}".toLowerCase(), blocks: slackMessage('pull-request'))
                         currentBuild.result = 'ABORTED'
-                        error("Aborting the build - submit a pull request to test")   
+                        error("Aborting the build - submit a pull request to test")  
+                        sleep(2)
+                        slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH}".toLowerCase(), blocks: slackMessage('pull-request')) 
                     }
                 }
             }
