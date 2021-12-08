@@ -52,7 +52,24 @@ def call(body) {
           PULLREQUEST_MAIN=githubPullRequestToMain()
         }
 
+
+
+
         stages {
+
+            stage ("Check Branch Types") {
+                when {
+                    expression {
+                        (BRANCH_MATCH ==~ /feature.*/ || BRANCH_MATCH ==~ /hotfix.*/)
+                    }
+                }
+                steps{
+                    currentBuild.getRawBuild().getExecutor().interrupt(Result.SUCCESS)
+                    sleep(1)     
+                }
+            }
+
+
             stage ("Code pull") {
                 steps{
                     cleanWs()
