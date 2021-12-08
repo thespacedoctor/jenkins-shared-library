@@ -65,6 +65,7 @@ def call(body) {
                 }
                 steps {
                     script {
+                        slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH}".toLowerCase(), blocks: slackMessage('success'))
                         currentBuild.result = 'ABORTED'
                         error("Aborting the build.")   
                     }
