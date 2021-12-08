@@ -64,8 +64,8 @@ def call(body) {
                     }
                 }
                 steps{
-                    currentBuild.getRawBuild().getExecutor().interrupt(Result.SUCCESS)
-                    sleep(1)     
+                    currentBuild.result = 'ABORTED'
+                    error("Aborting the build.")   
                 }
             }
 
