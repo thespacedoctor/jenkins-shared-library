@@ -368,7 +368,7 @@ String rtdUrl() {
 
 String githubUrl() {
     rn = repoName()
-    return "https://github.com/thespacedoctor/${rn}/tree/${env.BRANCH_NAME}".replaceAll("/tree/PR-","/pull/PR-")
+    return "https://github.com/thespacedoctor/${rn}/tree/${env.BRANCH_NAME}".replaceAll("/tree/PR-","/pull/")
 }
 
 String githubPullRequestToDev() {
