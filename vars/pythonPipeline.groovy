@@ -145,7 +145,11 @@ def call(body) {
             stage('Build conda python 3.7 environment & install code') {
                 steps {
                     updateGithubCommitStatus(currentBuild,  "jenkins/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
-                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx 
+                    sh '''if [ -f "environments.yml" ]; then
+                            conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx --file=environments.yml
+                          else 
+                            conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx
+                          fi
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
                           conda install -c conda-forge sphinxcontrib-apidoc
