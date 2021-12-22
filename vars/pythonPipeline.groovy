@@ -146,12 +146,12 @@ def call(body) {
                 steps {
                     updateGithubCommitStatus(currentBuild,  "jenkins/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
                     sh '''if [ -f "environment.yml" ]; then
-                            conda env create --yes -n ${BUILD_TAG}-p3 pip twine sphinx --file=environment.yml
+                            conda env create -n ${BUILD_TAG}-p3 --file=environment.yml
                           else 
                             conda create --yes -n ${BUILD_TAG}-p3 python=3.7 pip twine sphinx
                           fi
                           source activate ${BUILD_TAG}-p3 
-                          conda install pytest coverage pytest-cov sphinx ${EXTRA_CONDA_PACKAGES} 
+                          conda install pytest coverage pytest-cov sphinx pip twine ${EXTRA_CONDA_PACKAGES} 
                           conda install -c conda-forge sphinxcontrib-apidoc
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES} 
