@@ -413,6 +413,11 @@ def slackMessage(status) {
     } else if(status == "pull-request") {
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/pull-request.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*\nPull Request - DEV: *<${env.PULLREQUEST_DEV}|${env.REPO_NAME}>*\nPull Request - MAIN: *<${env.PULLREQUEST_MAIN}|${env.REPO_NAME}>*"
+    } else if(BRANCH_MATCH ==~ /PR\-.*/) {
+        def crStr = readFile('reports/coverage.txt').trim()
+        int cr = Math.floor(Double.valueOf(crStr)*100.0);
+        badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-passing-success.png"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nTEST COVERAGE: *${cr}%*\nSTATUS: *${status}*\nREADTHEDOCS: *<${env.RTD_URL}|${env.REPO_NAME}>*\nPYPI: *<${env.PYPI_URL}|${env.REPO_NAME}>*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*\n*<${env.GITHUB_URL}|MERGE PULL-REQUEST HERE>*"
     } else {
         def crStr = readFile('reports/coverage.txt').trim()
         int cr = Math.floor(Double.valueOf(crStr)*100.0);
