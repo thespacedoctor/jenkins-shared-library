@@ -176,7 +176,7 @@ def call(body) {
                             pip install -r requirements.txt --use-deprecated=legacy-resolver
                             source activate ${BUILD_TAG}-p3
                             SPHINX_APIDOC_OPTIONS='members,undoc-members,show-inheritance,inherited-members,member-order' sphinx-apidoc -fMeTP  -o source/_api ../ ../setup.py ../${REPO_NAME}/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
-                            make html
+                            make html SPHINXOPTS=-vP
                         '''
                 }
             }
