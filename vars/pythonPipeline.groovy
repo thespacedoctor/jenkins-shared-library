@@ -132,20 +132,22 @@ def call(body) {
                 }
                 steps {
                     updateGithubCommitStatus(currentBuild,  "jenkins/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
-                    sh '''conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip 
-                                  source activate ${BUILD_TAG}-p2
-                                  conda install pytest pandas coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
-                                  ${EXTRA_CONDA_INSTALL_COMMANDS}
-                                  pip install coverage-badge ${EXTRA_PIP_PACKAGES}
-                                  pip install -e .
-                                '''
+                    sh '''conda clean --all
+                          conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip 
+                          source activate ${BUILD_TAG}-p2
+                          conda install pytest pandas coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
+                          ${EXTRA_CONDA_INSTALL_COMMANDS}
+                          pip install coverage-badge ${EXTRA_PIP_PACKAGES}
+                          pip install -e .
+                        '''
                 }
             }
 
             stage('Build conda python 3.8 environment & install code') {
                 steps {
                     updateGithubCommitStatus(currentBuild,  "jenkins/thespacedoctor", BUILD_URL, "In Progress", "PENDING")
-                    sh '''conda create --yes -n ${BUILD_TAG}-p3 python=3.8 pip twine sphinx
+                    sh '''conda clean --all
+                          conda create --yes -n ${BUILD_TAG}-p3 python=3.8 pip twine sphinx
                           source activate ${BUILD_TAG}-p3 
                           conda install pytest coverage pytest-cov sphinx pip twine ${EXTRA_CONDA_PACKAGES} 
                           conda install -c conda-forge sphinxcontrib-apidoc
