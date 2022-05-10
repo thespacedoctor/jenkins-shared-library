@@ -32,8 +32,8 @@ def call(body) {
 
         options {
             skipDefaultCheckout()
-            // KEEP THE 10 MOST RECENT BUILDS
-            buildDiscarder(logRotator(numToKeepStr: '2'))
+            // KEEP THE 1 MOST RECENT BUILDS
+            buildDiscarder(logRotator(numToKeepStr: '1'))
             timestamps()
         }
         // SOURCE ANACONDA
