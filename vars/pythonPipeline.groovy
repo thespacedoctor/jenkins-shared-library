@@ -186,14 +186,16 @@ def call(body) {
                     }
                 }
                 steps {
-                    script {
-                        try {
-                            sh  ''' source activate ${BUILD_TAG}-p2
-                                    pytest --verbose --junit-xml test-reports/unit_tests_p2.xml
-                                '''
-                            buildBadge.setStatus('passing')
-                        } catch (Exception err) {
-                            buildBadge.setStatus('failing')
+                    lock("${env.REPO_NAME}") {
+                        script {
+                            try {
+                                sh  ''' source activate ${BUILD_TAG}-p2
+                                        pytest --verbose --junit-xml test-reports/unit_tests_p2.xml
+                                    '''
+                                buildBadge.setStatus('passing')
+                            } catch (Exception err) {
+                                buildBadge.setStatus('failing')
+                            }
                         }
                     }
                 }
@@ -207,15 +209,17 @@ def call(body) {
 
             stage('Unit tests for Python 3') {
                 steps {
-                    script {
-                        try {
-                            sh  ''' source activate ${BUILD_TAG}-p3
-                                    pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml --cov-report html
-                                    coverage-badge -f -o coverage.svg
-                                    head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" > reports/coverage.txt
-                                '''
-                        } catch (Exception err) {
-                            buildBadge.setStatus('failing')
+                    lock("${env.REPO_NAME}") {
+                        script {
+                            try {
+                                sh  ''' source activate ${BUILD_TAG}-p3
+                                        pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml --cov-report html
+                                        coverage-badge -f -o coverage.svg
+                                        head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" > reports/coverage.txt
+                                    '''
+                            } catch (Exception err) {
+                                buildBadge.setStatus('failing')
+                            }
                         }
                     }
                 }
