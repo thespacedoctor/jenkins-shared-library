@@ -179,7 +179,7 @@ def call(body) {
                                         make html SPHINXOPTS=-vP
                                     '''
                             } catch (Exception err) {
-                                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} docs failed".toLowerCase(), blocks: slackMessage("Failed"))
+                                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} docs failed".toLowerCase(), blocks: slackMessage("Docs Failing"))
                             }
                         }
                     
