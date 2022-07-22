@@ -178,8 +178,9 @@ def call(body) {
                                         SPHINX_APIDOC_OPTIONS='members,undoc-members,show-inheritance,inherited-members,member-order' sphinx-apidoc -fMeTP  -o source/_api ../ ../setup.py ../${REPO_NAME}/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
                                         make html SPHINXOPTS=-vP
                                     '''
+                                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} docs failed".toLowerCase(), blocks: slackMessage("docs-passing"))
                             } catch (Exception err) {
-                                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} docs failed".toLowerCase(), blocks: slackMessage("Docs Failing"))
+                                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} docs failed".toLowerCase(), blocks: slackMessage("docs-failing"))
                             }
                         }
                     
@@ -419,6 +420,12 @@ def slackMessage(status) {
     } else if(status == "running") {
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/build-running-blueviolet.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*"  
+    } else if(status == "docs-failing") {
+        badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/docs-failing.png"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*"
+    } else if(status == "docs-passing") {
+        badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/docs-passing.png"
+        message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nSTATUS: *${status}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*"
     } else if(status == "pull-request") {
         badgeImage = "https://cdn.jsdelivr.net/gh/thespacedoctor/jenkins-shared-library/resources/pull-request.png"
         message = "REPO: *<${env.OVERVIEW_URL}|${env.REPO_NAME}>*\nBRANCH: *<${env.BUILD_URL}|${env.BRANCH_MATCH}>*\nBUILD: *#${env.BUILD_NUMBER}*\nGITHUB: *<${env.GITHUB_URL}|${env.REPO_NAME}/${env.BRANCH_MATCH}>*\nPull Request - DEV: *<${env.PULLREQUEST_DEV}|${env.REPO_NAME}>*\nPull Request - MAIN: *<${env.PULLREQUEST_MAIN}|${env.REPO_NAME}>*"
