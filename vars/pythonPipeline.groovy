@@ -178,7 +178,7 @@ def call(body) {
                                         SPHINX_APIDOC_OPTIONS='members,undoc-members,show-inheritance,inherited-members,member-order' sphinx-apidoc -fMeTP  -o source/_api ../ ../setup.py ../${REPO_NAME}/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
                                         make html SPHINXOPTS=-vP
                                     '''
-                                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} docs failed".toLowerCase(), blocks: slackMessage("docs-passing"))
+                                slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} docs passing".toLowerCase(), blocks: slackMessage("docs-passing"))
                             } catch (Exception err) {
                                 slackSend(message: "${env.REPO_NAME} - ${env.BRANCH_MATCH} docs failed".toLowerCase(), blocks: slackMessage("docs-failing"))
                             }
