@@ -168,6 +168,7 @@ def call(body) {
                     }
                 }
                 steps {
+                
                     script {
                             try {
                                 echo sh(script: 'source activate ${BUILD_TAG}-p3 ; which sphinx-apidoc', returnStdout: true).trim()
@@ -308,7 +309,7 @@ def call(body) {
                               git add . --all
                               git commit -am "Merged ${BRANCH_MATCH} branch to master" || true
                               git push origin master
-                              sleep 60
+                              sleep 180
                               git checkout develop
                               git merge -Xtheirs ${BRANCH_MATCH}
                               git add . --all
