@@ -27,7 +27,7 @@ def call(body) {
         // }
 
         triggers {
-            cron((env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master') ? 'H H * * H' : '')
+            cron((env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'main') ? 'H H * * H' : '')
         }
 
         options {
@@ -289,7 +289,7 @@ def call(body) {
             // }
 
 
-            stage('Merge Release to Development & Master Branches') {
+            stage('Merge Release to Development & Main Branches') {
                 when {
                     expression {
                         currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /release.*/)
@@ -304,11 +304,13 @@ def call(body) {
                               git commit -am "adding files generated during build" || true
                               git branch -a
                               git checkout ${BRANCH_MATCH}
-                              git checkout master
+                              git checkout main || true
+                              git checkout master || true
                               git merge -Xtheirs ${BRANCH_MATCH}
                               git add . --all
-                              git commit -am "Merged ${BRANCH_MATCH} branch to master" || true
-                              git push origin master
+                              git commit -am "Merged ${BRANCH_MATCH} branch to main" || true
+                              git push origin main || true
+                              git push origin master || true
                               sleep 180
                               git checkout develop
                               git merge -Xtheirs ${BRANCH_MATCH}
@@ -320,10 +322,10 @@ def call(body) {
                 }
             }
 
-            stage('Build and push master branch to PyPI') {
+            stage('Build and push main branch to PyPI') {
                 when {
                     expression {
-                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /master/)
+                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /master/ || (BRANCH_MATCH ==~ /main/)
                     }
                 }
                 steps {
