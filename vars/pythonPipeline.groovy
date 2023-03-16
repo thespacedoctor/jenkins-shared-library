@@ -325,7 +325,7 @@ def call(body) {
             stage('Build and push main branch to PyPI') {
                 when {
                     expression {
-                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /master/ || (BRANCH_MATCH ==~ /main/)
+                        currentBuild.currentResult == 'SUCCESS' && (BRANCH_MATCH ==~ /master/ || BRANCH_MATCH ==~ /main/)
                     }
                 }
                 steps {
