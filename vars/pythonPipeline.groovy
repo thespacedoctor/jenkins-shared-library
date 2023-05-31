@@ -135,7 +135,7 @@ def call(body) {
                     sh '''conda clean --all
                           conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip 
                           source activate ${BUILD_TAG}-p2
-                          conda install pytest pandas coverage pytest-cov pytest-profiling ${EXTRA_CONDA_PACKAGES}
+                          conda install pytest pandas coverage pytest-cov pytest-profiling graphviz ${EXTRA_CONDA_PACKAGES}
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                           pip install -e .
@@ -149,7 +149,7 @@ def call(body) {
                     sh '''conda clean --all
                           conda create --yes -n ${BUILD_TAG}-p3 python=3.8 pip twine sphinx
                           source activate ${BUILD_TAG}-p3 
-                          conda install pytest coverage pytest-cov sphinx pip twine ${EXTRA_CONDA_PACKAGES} 
+                          conda install pytest coverage pytest-cov sphinx pip twine graphviz ${EXTRA_CONDA_PACKAGES} 
                           conda install -c conda-forge sphinxcontrib-apidoc pytest-profiling
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES} 
