@@ -135,7 +135,7 @@ def call(body) {
                     sh '''conda clean --all
                           conda create --yes -n ${BUILD_TAG}-p2 python=2.7 pip 
                           source activate ${BUILD_TAG}-p2
-                          conda install pytest pandas coverage pytest-cov ${EXTRA_CONDA_PACKAGES}
+                          conda install pytest pandas coverage pytest-cov pytest-profiling ${EXTRA_CONDA_PACKAGES}
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES}
                           pip install -e .
@@ -149,7 +149,7 @@ def call(body) {
                     sh '''conda clean --all
                           conda create --yes -n ${BUILD_TAG}-p3 python=3.8 pip twine sphinx
                           source activate ${BUILD_TAG}-p3 
-                          conda install pytest coverage pytest-cov sphinx pip twine ${EXTRA_CONDA_PACKAGES} 
+                          conda install pytest coverage pytest-cov pytest-profiling sphinx pip twine ${EXTRA_CONDA_PACKAGES} 
                           conda install -c conda-forge sphinxcontrib-apidoc
                           ${EXTRA_CONDA_INSTALL_COMMANDS}
                           pip install coverage-badge ${EXTRA_PIP_PACKAGES} 
@@ -222,9 +222,10 @@ def call(body) {
                         script {
                             try {
                                 sh  ''' source activate ${BUILD_TAG}-p3
-                                        pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml --cov-report html
+                                        pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml --cov-report html -m "not full" -s --profile-svg --profile
                                         coverage-badge -f -o coverage.svg
                                         head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" > reports/coverage.txt
+                                        for i in prof/*.prof; do gprof2dot -f pstats $i | dot -Tsvg -o $i.svg; done
                                     '''
                             } catch (Exception err) {
                                 buildBadge.setStatus('failing')
