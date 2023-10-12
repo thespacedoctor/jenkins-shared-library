@@ -222,7 +222,7 @@ def call(body) {
                         script {
                             try {
                                 sh  ''' source activate ${BUILD_TAG}-p3
-                                        pytest --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml --cov-report html -m "not full" -s --profile-svg --profile
+                                        pytest --last-failed --verbose --junit-xml test-reports/unit_tests_p3.xml --cov --cov-report xml:reports/coverage.xml --cov-report html -m "not full" -s --profile-svg --profile
                                         coverage-badge -f -o coverage.svg
                                         head -3 reports/coverage.xml | grep -oP "line-rate\\S*" | grep -oP "\\d.\\d*" > reports/coverage.txt
                                         for i in prof/*.prof; do gprof2dot -f pstats $i | dot -Tsvg -o $i.svg; done
